@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Billing - PIMS</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+
+body{
+    background:#f4f6f9;
+}
+
+.card{
+    border:none;
+    border-radius:12px;
+}
+
+@media print {
+
+    body * {
+        visibility: hidden;
+    }
+
+    #invoice,
+    #invoice * {
+        visibility: visible;
+    }
+
+    #invoice {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+        padding: 20px;
+    }
+
+    .btn,
+    form,
+    .navbar,
+    .sidebar {
+        display: none !important;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container mt-4">
+
+<div class="card shadow">
+
+<div class="card-header bg-success text-white">
+
+<h3>
+<i class="bi bi-receipt"></i>
+Billing & Invoice
+</h3>
+
+</div>
+
+<div class="card-body">
+
+<form method="POST" action="/billing">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+Customer Name
+</label>
+
+<input
+type="text"
+name="customer_name"
+class="form-control"
+required>
+
+</div>
+
+<div class="col-md-6 mb-3">
+
+<label class="form-label">
+Select Medicine
+</label>
+
+<select
+name="drug_name"
+class="form-select"
+required>
+
+<option value="">Select Medicine</option>
+
+{% for drug in drugs %}
+
+<option
+    value="{{ drug[1] }}"
+    data-price="{{ drug[6] }}">
+    {{ drug[1] }} (Stock: {{ drug[4] }})
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+Quantity
+</label>
+
+<input
+type="number"
+id="quantity"
+name="quantity"
+class="form-control"
+min="1"
+value="1"
+required>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+Price (₹)
+</label>
+
+<input
+type="number"
+id="price"
+name="price"
+class="form-control"
+step="0.01"
+required>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+Total Amount (₹)
+</label>
+
+<input
+type="number"
+id="total"
+name="total_amount"
+class="form-control"
+step="0.01"
+readonly>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="d-flex gap-2">
+
+<button
+type="submit"
+class="btn btn-success">
+<i class="bi bi-save"></i>
+Save Bill 
+</button>
+
+<button
+type="button"
+class="btn btn-primary"
+onclick="printInvoice()">
+<i class="bi bi-printer"></i>
+Print Invoice
+</button>
+
+<hr>
+
+<div id="invoice" class="border p-4 mt-4">
+
+    <h2 class="text-center">PIMS PHARMACY</h2>
+    <p class="text-center">Pharmacy Inventory Management System</p>
+
+    <hr>
+
+    <p><b>Customer :</b> <span id="invCustomer"></span></p>
+    <p><b>Date :</b> <span id="invDate"></span></p>
+
+    <table class="table table-bordered">
+
+        <thead class="table-success">
+            <tr>
+                <th>Medicine</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td id="invDrug"></td>
+                <td id="invQty"></td>
+                <td id="invPrice"></td>
+                <td id="invTotal"></td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <h4 class="text-end">
+        Grand Total :
+        ₹ <span id="grandTotal"></span>
+    </h4>
+
+    <hr>
+
+    <p class="text-center">
+        <b>Thank You! Visit Again.</b>
+    </p>
+
+</div>
+
+<a
+href="/dashboard"
+class="btn btn-secondary">
+<i class="bi bi-arrow-left"></i>
+Back
+</a>
+
+</div>
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const quantity = document.getElementById("quantity");
+const price = document.getElementById("price");
+const total = document.getElementById("total");
+
+function calculateTotal() {
+
+    let qty = parseFloat(quantity.value) || 0;
+    let pr = parseFloat(price.value) || 0;
+
+    total.value = (qty * pr).toFixed(2);
+}
+
+quantity.addEventListener("input", calculateTotal);
+price.addEventListener("input", calculateTotal);
+
+window.onload = calculateTotal;
+
+</script>
+
+<script>
+function updateInvoice() {
+
+    let customer = document.querySelector("[name='customer_name']").value;
+    let drug = document.querySelector("[name='drug_name']").value;
+    let qty = document.getElementById("quantity").value;
+    let price = document.getElementById("price").value;
+    let total = document.getElementById("total").value;
+
+    document.getElementById("invCustomer").innerText = customer;
+    document.getElementById("invDrug").innerText = drug;
+    document.getElementById("invQty").innerText = qty;
+    document.getElementById("invPrice").innerText = "₹ " + price;
+    document.getElementById("invTotal").innerText = "₹ " + total;
+    document.getElementById("grandTotal").innerText = total;
+
+    const today = new Date();
+    document.getElementById("invDate").innerText =
+        today.toLocaleDateString();
+}
+
+document.querySelector("[name='customer_name']")
+    .addEventListener("keyup", updateInvoice);
+
+document.querySelector("[name='drug_name']")
+    .addEventListener("change", updateInvoice);
+
+document.getElementById("quantity")
+    .addEventListener("input", updateInvoice);
+
+document.getElementById("price")
+    .addEventListener("input", updateInvoice);
+
+updateInvoice();
+
+function printInvoice() {
+    window.print();
+}
+</script>
+
+<script>
+const drugSelect = document.querySelector("[name='drug_name']");
+const priceInput = document.getElementById("price");
+
+drugSelect.addEventListener("change", function () {
+
+    const selected = this.options[this.selectedIndex];
+
+    priceInput.value = selected.getAttribute("data-price");
+
+    calculateTotal();
+    updateInvoice();
+
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
