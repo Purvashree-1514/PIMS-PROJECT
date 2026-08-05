@@ -1,315 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>PIMS Dashboard</title>
+<title>PIMS Premium Dashboard</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
 
-body{
-    background:#f4f6f9;
-    font-family:Arial,sans-serif;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
 }
+
+body{
+background:#eef2ff;
+overflow-x:hidden;
+}
+
+/* Sidebar */
 
 .sidebar{
-    width:250px;
-    min-height:100vh;
-    background:#0d6efd;
+position:fixed;
+left:0;
+top:0;
+width:260px;
+height:100vh;
+background:linear-gradient(180deg,#4f46e5,#7c3aed);
+padding:25px;
+color:white;
+box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
-.sidebar h3{
-    color:#fff;
-    text-align:center;
-    padding:15px;
+.logo{
+font-size:28px;
+font-weight:bold;
+text-align:center;
+margin-bottom:35px;
+}
+
+.logo i{
+font-size:40px;
+display:block;
+margin-bottom:10px;
 }
 
 .sidebar a{
-    display:block;
-    color:white;
-    text-decoration:none;
-    padding:12px 18px;
-    margin:8px;
-    border-radius:8px;
-    transition:.3s;
+display:block;
+text-decoration:none;
+color:white;
+padding:14px 18px;
+border-radius:12px;
+margin-bottom:12px;
+transition:.3s;
+font-size:17px;
 }
 
 .sidebar a:hover{
-    background:#0b5ed7;
+background:rgba(255,255,255,.18);
+transform:translateX(8px);
 }
 
-.content{
-    flex:1;
-    padding:25px;
+.sidebar a i{
+margin-right:10px;
 }
 
-.card{
-    border:none;
-    border-radius:12px;
+/* Main */
+
+.main{
+margin-left:260px;
+padding:25px;
 }
 
-.table td,.table th{
-    vertical-align:middle;
+/* Header */
+
+.header{
+background:white;
+padding:18px 25px;
+border-radius:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 8px 25px rgba(0,0,0,.08);
+margin-bottom:25px;
+}
+
+.search-box{
+width:320px;
+}
+
+.search-box input{
+border-radius:30px;
+}
+
+/* Right */
+
+.right-icons{
+display:flex;
+align-items:center;
+gap:20px;
+}
+
+.bell{
+font-size:24px;
+cursor:pointer;
+}
+
+.profile{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.avatar{
+width:45px;
+height:45px;
+border-radius:50%;
+background:#4f46e5;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
+color:white;
+}
+
+/* Cards */
+
+.card-box{
+background:white;
+border-radius:22px;
+padding:25px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+transition:.3s;
+}
+
+.card-box:hover{
+transform:translateY(-6px);
+}
+
+.icon-circle{
+width:60px;
+height:60px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:26px;
+color:white;
+margin-bottom:15px;
+}
+
+.bg1{background:#4f46e5;}
+.bg2{background:#22c55e;}
+.bg3{background:#f59e0b;}
+.bg4{background:#ef4444;}
+
+.number{
+font-size:32px;
+font-weight:bold;
+}
+
+.label{
+color:gray;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<div class="d-flex">
+<!-- Sidebar -->
 
 <div class="sidebar">
 
-<h3>🏥 PIMS</h3>
+<div class="logo">
+<i class="bi bi-hospital"></i>
+PIMS Premium
+</div>
 
-<a href="/dashboard">
-<i class="bi bi-speedometer2"></i>
-Dashboard
+<a href="/dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+
+<a href="/add-drug"><i class="bi bi-capsule"></i> Drug Management</a>
+
+<a href="/sales"><i class="bi bi-cart-check"></i> Sales</a>
+
+<a href="/reports"><i class="bi bi-bar-chart"></i> Reports</a>
+
+<a href="/settings">
+    <i class="bi bi-gear"></i> Settings
 </a>
 
-<a href="/add-drug">
-<i class="bi bi-capsule-pill"></i>
-Drug Management
-</a>
-
-<a href="/sales">
-<i class="bi bi-cart-check"></i>
-Sales
-</a>
-
-<a href="/reports">
-<i class="bi bi-bar-chart"></i>
-Reports
-</a>
-
-<a href="/">
-<i class="bi bi-box-arrow-right"></i>
-Logout
-</a>
+<a href="/"><i class="bi bi-box-arrow-right"></i> Logout</a>
 
 </div>
 
-<div class="content">
+<!-- Main -->
 
-<h2 class="fw-bold">
-Welcome to Pharmacy Inventory Management System
-</h2>
+<div class="main">
 
-<p class="text-muted">
-Manage medicines, stock, sales and reports easily.
-</p>
+<div class="header">
 
-<hr>
-
-<div class="row mb-4">
-
-<div class="col-md-3 mb-3">
-<div class="card bg-primary text-white shadow">
-<div class="card-body text-center">
-<h6>Total Drugs</h6>
-<h2>{{ total_drugs }}</h2>
-</div>
-</div>
+<div>
+<h3>Welcome Admin 👋</h3>
+<small>Pharmacy Inventory Management System</small>
 </div>
 
-<div class="col-md-3 mb-3">
-<div class="card bg-success text-white shadow">
-<div class="card-body text-center">
-<h6>Total Stock</h6>
-<h2>{{ total_stock }}</h2>
-</div>
-</div>
+<div class="right-icons">
+
+<div class="search-box">
+<input type="text" class="form-control" placeholder="Search Drugs...">
 </div>
 
-<div class="col-md-3 mb-3">
-<div class="card bg-warning text-dark shadow">
-<div class="card-body text-center">
-<h6>Low Stock</h6>
-<h2>{{ low_stock|length }}</h2>
-</div>
-</div>
+<i class="bi bi-bell bell"></i>
+
+<div class="profile">
+<div class="avatar">
+A
 </div>
 
-<div class="col-md-3 mb-3">
-<div class="card bg-danger text-white shadow">
-<div class="card-body text-center">
-<h6>Total Sales</h6>
-<h2>{{ total_sales }}</h2>
-</div>
-</div>
+<div>
+<b>Admin</b><br>
+<small>Administrator</small>
 </div>
 
 </div>
 
-<!-- Low Stock Alert -->
+</div>
 
-<div class="card shadow mb-4">
+</div>
 
-    <div class="card-header bg-danger text-white">
-        <h5>⚠ Low Stock Alert</h5>
+<!-- Cards -->
+
+<div class="row g-4">
+
+<div class="col-lg-3">
+
+<div class="card-box">
+
+<div class="icon-circle bg1">
+<i class="bi bi-capsule"></i>
+</div>
+
+<div class="number">30</div>
+
+<div class="label">
+Total Drugs
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card-box">
+
+<div class="icon-circle bg2">
+<i class="bi bi-box-seam"></i>
+</div>
+
+<div class="number">2450</div>
+
+<div class="label">
+Total Stock
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card-box">
+
+<div class="icon-circle bg3">
+<i class="bi bi-currency-rupee"></i>
+</div>
+
+<div class="number">₹12,450</div>
+
+<div class="label">
+Today's Sales
+</div>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card-box">
+
+<div class="icon-circle bg4">
+<i class="bi bi-exclamation-triangle"></i>
+</div>
+
+<div class="number">5</div>
+
+<div class="label">
+Low Stock
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- ========================= -->
+<!-- Sales Chart + Alerts -->
+<!-- ========================= -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-8">
+        <div class="card-box">
+            <h4 class="mb-4">
+                <i class="bi bi-graph-up-arrow text-primary"></i>
+                Monthly Sales
+            </h4>
+
+            <canvas id="salesChart" height="120"></canvas>
+
+        </div>
     </div>
 
-    <div class="card-body">
+    <div class="col-lg-4">
 
-        {% if low_stock %}
+        <div class="card-box">
 
-        <table class="table table-bordered table-hover">
+            <h4 class="mb-3">
+                <i class="bi bi-bell-fill text-danger"></i>
+                Alerts
+            </h4>
 
-            <thead class="table-danger">
-                <tr>
-                    <th>Drug Name</th>
-                    <th>Available Stock</th>
-                </tr>
-            </thead>
+            <div class="alert alert-warning">
+                ⚠️ 5 Drugs Low Stock
+            </div>
 
-            <tbody>
+            <div class="alert alert-danger">
+                ⏰ 2 Drugs Expiring Soon
+            </div>
 
-            {% for item in low_stock %}
+            <div class="alert alert-success">
+                ✅ Stock Updated Successfully
+            </div>
 
-            <tr>
-                <td>{{ item[0] }}</td>
-                <td>
-                    <span class="badge bg-danger">
-                        {{ item[1] }}
-                    </span>
-                </td>
-            </tr>
-
-            {% endfor %}
-
-            </tbody>
-
-        </table>
-
-        {% else %}
-
-        <div class="alert alert-success">
-            ✅ No Low Stock Medicines
         </div>
 
-        {% endif %}
-
     </div>
 
 </div>
 
-<!-- Expiry Alert -->
+<!-- ========================= -->
+<!-- Premium Drug Table -->
+<!-- ========================= -->
 
-<div class="card shadow mb-4">
+<div class="card-box mt-4">
 
-    <div class="card-header bg-warning">
-        <h5>⏰ Expiry Alert (Next 30 Days)</h5>
-    </div>
+<h4 class="mb-4">
 
-    <div class="card-body">
+<i class="bi bi-capsule"></i>
 
-        {% if expiry_alert %}
+Recent Drugs
 
-        <table class="table table-bordered">
-
-            <thead class="table-warning">
-                <tr>
-                    <th>Drug Name</th>
-                    <th>Expiry Date</th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-            {% for item in expiry_alert %}
-
-            <tr>
-                <td>{{ item[0] }}</td>
-                <td>{{ item[1] }}</td>
-            </tr>
-
-            {% endfor %}
-
-            </tbody>
-
-        </table>
-
-        {% else %}
-
-        <div class="alert alert-success">
-            ✅ No medicines expiring in the next 30 days.
-        </div>
-
-        {% endif %}
-
-    </div>
-
-</div>
-
-<!-- Drug List -->
-
-<div class="card shadow">
-
-<div class="card-header bg-white">
-
-<div class="row">
-
-<div class="col-md-2">
-
-<select class="form-select">
-<option>Show 10</option>
-<option>Show 25</option>
-<option>Show 50</option>
-</select>
-
-</div>
-
-<div class="col-md-4 ms-auto">
-
-<input
-type="text"
-id="searchInput"
-class="form-control"
-placeholder="🔍 Search Drug...">
-
-</div>
-
-<div class="col-md-2">
-
-<a href="/add-drug" class="btn btn-success w-100">
-➕ Add Drug
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="card-body">
+</h4>
 
 <div class="table-responsive">
 
-<table class="table table-bordered table-hover align-middle" id="drugTable">
+<table class="table table-hover align-middle">
 
-<thead class="table-primary">
+<thead class="table-dark">
 
 <tr>
 
-<th>Sr.No</th>
-<th>Drug Name</th>
-<th>Brand</th>
-<th>Pharmacological Class</th>
-<th>Schedule</th>
-<th>Dosage Form</th>
-<th>Storage</th>
+<th>#</th>
+<th>Drug</th>
+<th>Category</th>
 <th>Stock</th>
-<th>Expiry Date</th>
-<th>Price</th>
+<th>Expiry</th>
 <th>Status</th>
-<th>Action</th>
 
 </tr>
 
@@ -317,44 +393,50 @@ placeholder="🔍 Search Drug...">
 
 <tbody>
 
-{% for drug in drugs %}
-
 <tr>
-
-    <td>{{ loop.index }}</td>
-    <td>{{ drug[1] }}</td>
-    <td>{{ drug[2] }}</td>
-    <td>{{ drug[8] }}</td>
-    <td>{{ drug[9] }}</td>
-    <td>{{ drug[10] }}</td>
-    <td>{{ drug[11] }}</td>
-    <td>{{ drug[4] }}</td>
-    <td>{{ drug[5] }}</td>
-    <td>₹ {{ drug[6] }}</td>
-
-    <td>
-        {% if drug[4] <= 10 %}
-            <span class="badge bg-danger">Low Stock</span>
-        {% else %}
-            <span class="badge bg-success">Available</span>
-        {% endif %}
-    </td>
-
-    <td>
-        <a href="/edit-drug/{{ drug[0] }}" class="btn btn-warning btn-sm">
-            <i class="bi bi-pencil-square"></i> Edit
-        </a>
-
-        <a href="/delete-drug/{{ drug[0] }}"
-           class="btn btn-danger btn-sm"
-           onclick="return confirm('Delete this drug?')">
-            <i class="bi bi-trash"></i> Delete
-        </a>
-    </td>
-
+<td>1</td>
+<td>Paracetamol</td>
+<td>Tablet</td>
+<td>120</td>
+<td>12-08-2027</td>
+<td><span class="badge bg-success">Available</span></td>
 </tr>
 
-{% endfor %}
+<tr>
+<td>2</td>
+<td>Dolo 650</td>
+<td>Tablet</td>
+<td>60</td>
+<td>15-10-2027</td>
+<td><span class="badge bg-success">Available</span></td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>Amoxicillin</td>
+<td>Capsule</td>
+<td>15</td>
+<td>05-09-2026</td>
+<td><span class="badge bg-warning">Low Stock</span></td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>Insulin</td>
+<td>Injection</td>
+<td>5</td>
+<td>10-08-2026</td>
+<td><span class="badge bg-danger">Critical</span></td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>Vitamin C</td>
+<td>Syrup</td>
+<td>200</td>
+<td>15-01-2028</td>
+<td><span class="badge bg-success">Available</span></td>
+</tr>
 
 </tbody>
 
@@ -364,171 +446,104 @@ placeholder="🔍 Search Drug...">
 
 </div>
 
-</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+const ctx = document.getElementById("salesChart");
 
-    const searchInput = document.getElementById("searchInput");
-    const rows = document.querySelectorAll("#drugTable tbody tr");
-
-    searchInput.addEventListener("keyup", function () {
-
-        const value = this.value.toLowerCase();
-
-        rows.forEach(function (row) {
-
-            if (row.innerText.toLowerCase().includes(value)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-
-        });
-
-    });
-
+new Chart(ctx,{
+type:"line",
+data:{
+labels:["Jan","Feb","Mar","Apr","May","Jun"],
+datasets:[{
+label:"Sales",
+data:[12000,18000,15000,25000,30000,27000],
+fill:true,
+tension:.4,
+borderWidth:4
+}]
+},
+options:{
+responsive:true
+}
 });
 </script>
 
-<!-- Charts -->
+<!-- ========================= -->
+<!-- Analytics Section -->
+<!-- ========================= -->
 
 <div class="row mt-4">
 
-    <div class="col-md-8 mb-3">
+    <!-- Stock Distribution -->
+    <div class="col-lg-6">
+        <div class="card-box">
+            <h4 class="mb-4">
+                <i class="bi bi-pie-chart-fill text-primary"></i>
+                Stock Distribution
+            </h4>
 
-        <div class="card shadow">
-
-            <div class="card-header bg-primary text-white">
-                📊 Stock Graph
-            </div>
-
-            <div class="card-body">
-                <canvas id="stockChart"></canvas>
-            </div>
-
+            <canvas id="stockChart" height="200"></canvas>
         </div>
-
     </div>
 
-    <div class="col-md-4 mb-3">
+    <!-- Recent Activity -->
+    <div class="col-lg-6">
+        <div class="card-box">
 
-        <div class="card shadow">
+            <h4 class="mb-4">
+                <i class="bi bi-clock-history text-success"></i>
+                Recent Activity
+            </h4>
 
-            <div class="card-header bg-success text-white">
-                🥧 Sales Graph
-            </div>
+            <ul class="list-group">
 
-            <div class="card-body">
-                <canvas id="salesChart"></canvas>
-            </div>
+                <li class="list-group-item">
+                    💊 Paracetamol Stock Updated
+                    <span class="float-end text-success">2 min ago</span>
+                </li>
+
+                <li class="list-group-item">
+                    💰 New Sale ₹2,500
+                    <span class="float-end text-primary">10 min ago</span>
+                </li>
+
+                <li class="list-group-item">
+                    ⚠️ Dolo 650 Low Stock
+                    <span class="float-end text-danger">25 min ago</span>
+                </li>
+
+                <li class="list-group-item">
+                    📦 Vitamin C Added
+                    <span class="float-end text-secondary">1 hour ago</span>
+                </li>
+
+            </ul>
 
         </div>
-
     </div>
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-
 <script>
+const stockctx = document.getElementById("stockChart");
 
-const stockCtx = document.getElementById("stockChart");
-
-if (stockCtx) {
-
-    new Chart(stockCtx, {
-
-        type: "bar",
-
-        data: {
-
-            labels: {{ labels | tojson }},
-
-            datasets: [{
-
-                label: "Stock",
-
-                data: {{ stock_data | tojson }},
-
-                backgroundColor: [
-                    "#0d6efd",
-                    "#198754",
-                    "#ffc107",
-                    "#dc3545",
-                    "#6f42c1",
-                    "#20c997"
-                ],
-
-                borderWidth: 1
-
-            }]
-
-        },
-
-        options: {
-
-            responsive: true,
-
-            plugins: {
-
-                legend: {
-
-                    display: true
-
-                }
-
-            }
-
-        }
-
-    });
-
+new Chart(stockctx,{
+type:"doughnut",
+data:{
+labels:["Tablet","Capsule","Injection","Syrup"],
+datasets:[{
+data:[45,25,15,15]
+}]
+},
+options:{
+responsive:true,
+plugins:{
+legend:{
+position:"bottom"
 }
-
-const salesCtx = document.getElementById("salesChart");
-
-if (salesCtx) {
-
-    new Chart(salesCtx, {
-
-        type: "doughnut",
-
-        data: {
-
-            labels: ["Total Sales"],
-
-            datasets: [{
-
-                data: [{{ total_sales }}],
-
-                backgroundColor: [
-
-                    "#198754"
-
-                ]
-
-            }]
-
-        },
-
-        options: {
-
-            responsive: true
-
-        }
-
-    });
-
 }
-
-
+}
+});
 </script>
-    
 
-</body>
-</html>
-    
-   

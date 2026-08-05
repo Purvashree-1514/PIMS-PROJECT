@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>PIMS Premium | Settings</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+
+body{
+background:#eef2ff;
+font-family:Segoe UI,sans-serif;
+}
+
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+width:260px;
+height:100%;
+background:linear-gradient(180deg,#4f46e5,#7c3aed);
+padding:25px;
+color:#fff;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+text-align:center;
+margin-bottom:35px;
+}
+
+.sidebar a{
+display:block;
+color:white;
+padding:14px 18px;
+text-decoration:none;
+border-radius:12px;
+margin-bottom:10px;
+transition:.3s;
+}
+
+.sidebar a:hover,
+.sidebar .active{
+background:rgba(255,255,255,.15);
+}
+
+.main{
+margin-left:260px;
+padding:25px;
+}
+
+.header{
+background:white;
+padding:20px;
+border-radius:18px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+margin-bottom:25px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.card{
+border:none;
+border-radius:18px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+margin-bottom:25px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div class="logo">
+<i class="bi bi-hospital"></i><br>
+PIMS Premium
+</div>
+
+<a href="/dashboard">
+<i class="bi bi-speedometer2"></i>
+Dashboard
+</a>
+
+<a href="/drugs">
+<i class="bi bi-capsule"></i>
+Drug Management
+</a>
+
+<a href="/sales">
+<i class="bi bi-cart-check"></i>
+Sales
+</a>
+
+<a href="/reports">
+<i class="bi bi-bar-chart"></i>
+Reports
+</a>
+
+<a href="/settings" class="active">
+<i class="bi bi-gear"></i>
+Settings
+</a>
+
+<a href="/">
+<i class="bi bi-box-arrow-right"></i>
+Logout
+</a>
+
+</div>
+
+<div class="main">
+
+<div class="header">
+
+<div>
+
+<h3>
+<i class="bi bi-gear-fill"></i>
+Settings
+</h3>
+
+<p class="text-muted mb-0">
+Manage your PIMS Premium application
+</p>
+
+</div>
+
+</div>
+
+<!-- Admin Profile -->
+
+<div class="card">
+
+<div class="card-header bg-primary text-white">
+<h5 class="mb-0">
+<i class="bi bi-person-circle"></i>
+Admin Profile
+</h5>
+</div>
+
+<div class="card-body">
+
+<form method="POST" action="/settings"></form>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Admin Name</label>
+<input type="text"
+class="form-control"
+name="full_name"
+value="{{ profile[1] }}"
+required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Email</label>
+<input type="email"
+class="form-control"
+name="email"
+value="{{ profile[2] }}"
+required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Mobile Number</label>
+<input type="text"
+class="form-control"
+name="phone"
+value="{{ profile[3] }}"
+required>
+</div>
+
+<div class="col-12">
+<button type="submit" class="btn btn-primary">
+<i class="bi bi-save"></i>
+Save Profile
+</button>
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+<!-- Change Password -->
+
+<div class="card">
+
+<div class="card-header bg-danger text-white">
+<h5 class="mb-0">
+<i class="bi bi-shield-lock"></i>
+Change Password
+</h5>
+</div>
+
+<div class="card-body">
+
+<div class="row">
+
+<div class="col-md-4 mb-3">
+<label class="form-label">Current Password</label>
+<input type="password" class="form-control">
+</div>
+
+<div class="col-md-4 mb-3">
+<label class="form-label">New Password</label>
+<input type="password" class="form-control">
+</div>
+
+<div class="col-md-4 mb-3">
+<label class="form-label">Confirm Password</label>
+<input type="password" class="form-control">
+</div>
+
+<div class="col-12">
+<button class="btn btn-danger">
+<i class="bi bi-key"></i>
+Update Password
+</button>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Pharmacy Information -->
+
+<div class="card">
+
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0">
+            <i class="bi bi-hospital"></i>
+            Pharmacy Information
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Pharmacy Name</label>
+                <input type="text" class="form-control" value="PIMS Medical Store">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">GST Number</label>
+                <input type="text" class="form-control" placeholder="Enter GST Number">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Phone Number</label>
+                <input type="text" class="form-control" placeholder="Enter Phone Number">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Email Address</label>
+                <input type="email" class="form-control" placeholder="Enter Email">
+            </div>
+
+            <div class="col-12 mb-3">
+                <label class="form-label">Address</label>
+                <textarea class="form-control" rows="3" placeholder="Enter Pharmacy Address"></textarea>
+            </div>
+
+            <div class="col-12">
+                <button class="btn btn-success">
+                    <i class="bi bi-save"></i>
+                    Save Pharmacy Details
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Notification Settings -->
+
+<div class="card">
+
+    <div class="card-header bg-warning">
+        <h5 class="mb-0">
+            <i class="bi bi-bell-fill"></i>
+            Notification Settings
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="form-check form-switch mb-3">
+
+            <input class="form-check-input" type="checkbox" checked>
+
+            <label class="form-check-label">
+                Enable Low Stock Alerts
+            </label>
+
+        </div>
+
+        <div class="form-check form-switch mb-3">
+
+            <input class="form-check-input" type="checkbox" checked>
+
+            <label class="form-check-label">
+                Enable Expiry Alerts
+            </label>
+
+        </div>
+
+        <div class="form-check form-switch mb-3">
+
+            <input class="form-check-input" type="checkbox">
+
+            <label class="form-check-label">
+                Enable Email Notifications
+            </label>
+
+        </div>
+
+        <button class="btn btn-warning">
+            <i class="bi bi-check-circle"></i>
+            Save Notification Settings
+        </button>
+
+    </div>
+
+</div>
+
+<!-- Theme Settings -->
+
+<div class="card">
+
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">
+            <i class="bi bi-palette-fill"></i>
+            Theme Settings
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <label class="form-label">Select Theme</label>
+
+        <select class="form-select mb-3">
+
+            <option selected>Light Theme</option>
+            <option>Dark Theme</option>
+            <option>Blue Theme</option>
+            <option>Purple Theme</option>
+
+        </select>
+
+        <button class="btn btn-info text-white">
+            <i class="bi bi-check-circle"></i>
+            Apply Theme
+        </button>
+
+    </div>
+
+</div>
+
+<!-- Backup & Restore -->
+
+<div class="card">
+
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0">
+            <i class="bi bi-database-fill"></i>
+            Database Backup & Restore
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <div class="d-flex gap-3 flex-wrap">
+
+            <button class="btn btn-success">
+                <i class="bi bi-download"></i>
+                Backup Database
+            </button>
+
+            <button class="btn btn-warning">
+                <i class="bi bi-upload"></i>
+                Restore Database
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Footer -->
+
+<footer class="text-center mt-5 text-muted">
+
+    <hr>
+
+    <p class="mb-0">
+        © 2026 <strong>PIMS Premium</strong> |
+        Pharmacy Inventory Management System
+    </p>
+
+</footer>
+
+</div>
+<!-- End Main -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

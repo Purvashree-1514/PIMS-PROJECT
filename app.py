@@ -1,4 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
+import pymysql
+
+pymysql.install_as_MySQLdb()
+
 from flask_mysqldb import MySQL
 from datetime import date, timedelta
 
@@ -11,10 +15,13 @@ from openpyxl import Workbook
 app = Flask(__name__)
 
 # ---------------- MySQL Configuration ----------------
+import os
+
 app.config["MYSQL_HOST"] = "localhost"
 app.config["MYSQL_USER"] = "root"
 app.config["MYSQL_PASSWORD"] = ""
 app.config["MYSQL_DB"] = "pims_db"
+app.config["MYSQL_PORT"] = 3306
 
 mysql = MySQL(app)
 
@@ -22,7 +29,9 @@ mysql = MySQL(app)
 USERNAME = "Purvashree14"
 PASSWORD = "Purvashree07"
 
-# ---------------- Login ----------------
+# ==========================
+# Login
+# ==========================
 @app.route("/", methods=["GET", "POST"])
 def login():
 
@@ -31,7 +40,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        if username == USERNAME and password == PASSWORD:
+        if username == "Purvashree14" and password == "Purvashree07":
             return redirect(url_for("dashboard"))
         else:
             return render_template(
@@ -41,8 +50,10 @@ def login():
 
     return render_template("login.html")
 
+# ==========================
+# Dashboard
+# ==========================
 
-# ---------------- Dashboard ----------------
 @app.route("/dashboard")
 def dashboard():
 
@@ -53,46 +64,32 @@ def dashboard():
     total_drugs = cur.fetchone()[0]
 
     # Total Stock
-    cur.execute("SELECT SUM(stock) FROM drugs")
-    total_stock = cur.fetchone()[0] or 0
+    cur.execute("SELECT IFNULL(SUM(stock),0) FROM drugs")
+    total_stock = cur.fetchone()[0]
 
     # Low Stock
+    cur.execute("SELECT COUNT(*) FROM drugs WHERE stock <= 10")
+    low_stock = cur.fetchone()[0]
+
+    # Expiry Alert
+    cur.execute("SELECT COUNT(*) FROM drugs WHERE expiry_date <= CURDATE() + INTERVAL 30 DAY")
+    expiry_alert = cur.fetchone()[0]
+
+    # Total Sales
+    cur.execute("SELECT IFNULL(SUM(total_amount),0) FROM sales")
+    total_sales = cur.fetchone()[0]
+
+    # Recent Drugs
     cur.execute("""
         SELECT drug_name, stock
         FROM drugs
-        WHERE stock <= 10
-        ORDER BY stock ASC
+        ORDER BY id DESC
+        LIMIT 5
     """)
-    low_stock = cur.fetchall()
-
-    # Expiry Alert
-    today = date.today()
-    next_30_days = today + timedelta(days=30)
-
-    cur.execute("""
-        SELECT drug_name, expiry_date
-        FROM drugs
-        WHERE expiry_date BETWEEN %s AND %s
-        ORDER BY expiry_date ASC
-    """, (today, next_30_days))
-
-    expiry_alert = cur.fetchall()
-
-    # Total Sales
-    cur.execute("SELECT COUNT(*) FROM sales")
-    total_sales = cur.fetchone()[0]
-
-    # All Drugs
-    cur.execute("SELECT * FROM drugs ORDER BY id DESC")
     drugs = cur.fetchall()
 
-    # Chart Data
-    labels = []
-    stock_data = []
-
-    for drug in drugs:
-        labels.append(drug[1])      # Drug Name
-        stock_data.append(drug[8])  # Stock
+    labels = [row[0] for row in drugs]
+    stock_data = [row[1] for row in drugs]
 
     cur.close()
 
@@ -105,11 +102,13 @@ def dashboard():
         total_sales=total_sales,
         drugs=drugs,
         labels=labels,
-        stock_data=stock_data,
-        
+        stock_data=stock_data
     )
 
-# ---------------- Add Drug ----------------
+        # ==========================
+        # Add Drug
+        # ==========================
+
 @app.route("/add-drug", methods=["GET", "POST"])
 def add_drug():
 
@@ -129,11 +128,22 @@ def add_drug():
         cur = mysql.connection.cursor()
 
         cur.execute("""
-        INSERT INTO drugs
-        (drug_name, brand_name, pharmacological_class, schedule,
-        dosage_form, storage, category, stock, expiry_date, price)
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        """, (
+            INSERT INTO drugs
+            (
+                drug_name,
+                brand_name,
+                pharmacological_class,
+                schedule,
+                dosage_form,
+                storage,
+                category,
+                stock,
+                expiry_date,
+                price
+            )
+            VALUES
+            (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """,(
             drug_name,
             brand_name,
             pharmacological_class,
@@ -149,12 +159,45 @@ def add_drug():
         mysql.connection.commit()
         cur.close()
 
-        return redirect(url_for("dashboard"))
+        return redirect(url_for("drugs"))
 
     return render_template("add_drug.html")
 
+    # ==========================
+     # Drug Management
+     # ==========================
 
-# ---------------- Edit Drug ----------------
+@app.route("/drugs")
+def drugs():
+
+    cur = mysql.connection.cursor()
+
+    cur.execute("""
+        SELECT
+            id,
+            drug_name,
+            brand_name,
+            category,
+            stock,
+            expiry_date,
+            price
+        FROM drugs
+        ORDER BY id DESC
+    """)
+
+    drugs = cur.fetchall()
+
+    cur.close()
+
+    return render_template(
+        "drugs.html",
+        drugs=drugs
+    )
+
+ # ==========================
+# Edit Drug
+# ==========================
+
 @app.route("/edit-drug/<int:id>", methods=["GET", "POST"])
 def edit_drug(id):
 
@@ -174,19 +217,19 @@ def edit_drug(id):
         price = request.form["price"]
 
         cur.execute("""
-        UPDATE drugs
-        SET
-            drug_name=%s,
-            brand_name=%s,
-            pharmacological_class=%s,
-            schedule=%s,
-            dosage_form=%s,
-            storage=%s,
-            category=%s,
-            stock=%s,
-            expiry_date=%s,
-            price=%s
-        WHERE id=%s
+            UPDATE drugs
+            SET
+                drug_name=%s,
+                brand_name=%s,
+                pharmacological_class=%s,
+                schedule=%s,
+                dosage_form=%s,
+                storage=%s,
+                category=%s,
+                stock=%s,
+                expiry_date=%s,
+                price=%s
+            WHERE id=%s
         """, (
             drug_name,
             brand_name,
@@ -204,243 +247,153 @@ def edit_drug(id):
         mysql.connection.commit()
         cur.close()
 
-        return redirect(url_for("dashboard"))
+        return redirect(url_for("drugs"))
 
     cur.execute("SELECT * FROM drugs WHERE id=%s", (id,))
     drug = cur.fetchone()
+
     cur.close()
 
     return render_template("edit_drug.html", drug=drug)
 
-# ---------------- Delete Drug ----------------
+
+  # ==========================
+# Delete Drug
+# ==========================
+
 @app.route("/delete-drug/<int:id>")
 def delete_drug(id):
 
     cur = mysql.connection.cursor()
 
-    cur.execute("DELETE FROM drugs WHERE id=%s", (id,))
+    cur.execute(
+        "DELETE FROM drugs WHERE id=%s",
+        (id,)
+    )
+
     mysql.connection.commit()
 
     cur.close()
 
-    return redirect(url_for("dashboard"))
+    return redirect(url_for("drugs"))
 
 
-@app.route("/get-price/<drug_name>")
-def get_price(drug_name):
+  # ==========================
+# Sales Management
+# ==========================
 
-    cur = mysql.connection.cursor()
-
-    cur.execute(
-        "SELECT price, stock FROM drugs WHERE drug_name=%s",
-        (drug_name,)
-    )
-
-    data = cur.fetchone()
-
-    cur.close()
-
-    if data:
-        return {
-            "price": float(data[0]),
-            "stock": int(data[1])
-        }
-
-    return {
-        "price": 0,
-        "stock": 0
-    }
-
-@app.route("/billing", methods=["GET", "POST"])
-def billing():
-
-    cur = mysql.connection.cursor()
-
-    if request.method == "POST":
-
-        customer_name = request.form["customer_name"]
-        drug_name = request.form["drug_name"]
-        quantity = int(request.form["quantity"])
-
-        cur.execute(
-            "SELECT price, stock FROM drugs WHERE drug_name=%s",
-            (drug_name,)
-        )
-
-        drug = cur.fetchone()
-
-        if drug:
-
-            price = float(drug[0])
-            stock = int(drug[1])
-
-            if quantity > stock:
-                cur.close()
-                return "Not enough stock!"
-
-            total = price * quantity
-
-            cur.execute("""
-                INSERT INTO sales
-                (customer_name, drug_name, quantity, total_amount, sale_date)
-                VALUES (%s,%s,%s,%s,NOW())
-            """, (customer_name, drug_name, quantity, total))
-
-            cur.execute("""
-                UPDATE drugs
-                SET stock = stock-%s
-                WHERE drug_name=%s
-            """, (quantity, drug_name))
-
-            cur.execute("""
-            SELECT id, drug_name, brand_name, category,
-stock, expiry_date, price
-FROM drugs
-""")
-
-
-            mysql.connection.commit()
-
-    cur.execute("SELECT * FROM drugs")
-    drugs = cur.fetchall()
-
-    cur.close()
-
-    return render_template("billing.html", drugs=drugs)
-
-# ---------------- Sales ----------------
 @app.route("/sales")
 def sales():
 
     cur = mysql.connection.cursor()
 
-    cur.execute("SELECT * FROM sales ORDER BY id DESC")
-    sales = cur.fetchall()
-
-    cur.close()
-
-    return render_template("sales.html", sales=sales)
-
-# ---------- Add Sale ----------
-@app.route("/add-sale", methods=["GET", "POST"])
-def add_sale():
-
-    cur = mysql.connection.cursor()
-
-    cur.execute("SELECT drug_name, price, stock FROM drugs ORDER BY drug_name")
-    drugs = cur.fetchall()
-
-    if request.method == "POST":
-
-        customer_name = request.form["customer_name"]
-        drug_name = request.form["drug_name"]
-        quantity = int(request.form["quantity"])
-
-        cur.execute(
-            "SELECT price, stock FROM drugs WHERE drug_name=%s",
-            (drug_name,)
-        )
-        drug = cur.fetchone()
-
-        if not drug:
-            cur.close()
-            return "Drug not found!"
-
-        price = float(drug[0])
-        stock = int(drug[1])
-
-        if quantity > stock:
-            cur.close()
-            return "Not enough stock available!"
-
-        total_amount = quantity * price
-
-        cur.execute("""
-        INSERT INTO sales
-        (customer_name, drug_name, quantity, total_amount)
-        VALUES (%s,%s,%s,%s)
-        """, (
+    cur.execute("""
+        SELECT
+            id,
+            invoice_no,
             customer_name,
             drug_name,
             quantity,
-            total_amount
-        ))
+            price,
+            total_amount,
+            payment_method,
+            sale_date,
+            status
+        FROM sales
+        ORDER BY id DESC
+    """)
 
-        cur.execute("""
+    sales = cur.fetchall()
+
+    cur.execute("""
+        SELECT drug_name, price
+        FROM drugs
+        ORDER BY drug_name
+    """)
+
+    drugs = cur.fetchall()
+
+    cur.close()
+
+    return render_template(
+        "sales.html",
+        sales=sales,
+        drugs=drugs
+    )
+
+
+# ==========================
+# Save Sale
+# ==========================
+
+@app.route("/save_sale", methods=["POST"])
+def save_sale():
+
+    customer_name = request.form["customer_name"]
+    drug_name = request.form["drug_name"]
+    quantity = int(request.form["quantity"])
+    price = float(request.form["price"])
+    payment_method = request.form["payment_method"]
+
+    total_amount = quantity * price
+
+    cur = mysql.connection.cursor()
+
+    # Generate Invoice Number
+    cur.execute("SELECT COUNT(*) FROM sales")
+    count = cur.fetchone()[0] + 1
+    invoice_no = f"INV-{1000 + count}"
+
+    # Save Sale
+    cur.execute("""
+        INSERT INTO sales
+        (
+            invoice_no,
+            customer_name,
+            drug_name,
+            quantity,
+            price,
+            total_amount,
+            payment_method,
+            sale_date,
+            status
+        )
+        VALUES
+        (%s,%s,%s,%s,%s,%s,%s,CURDATE(),'Paid')
+    """, (
+        invoice_no,
+        customer_name,
+        drug_name,
+        quantity,
+        price,
+        total_amount,
+        payment_method
+    ))
+
+    # Reduce Stock
+    cur.execute("""
         UPDATE drugs
         SET stock = stock - %s
         WHERE drug_name = %s
-        """, (
-            quantity,
-            drug_name
-        ))
+    """, (quantity, drug_name))
 
-        mysql.connection.commit()
-        cur.close()
-
-        return redirect(url_for("sales"))
-
+    mysql.connection.commit()
     cur.close()
 
-    return render_template("add_sale.html", drugs=drugs)
+    return redirect(url_for("sales"))
 
-      
-
-# ---------------- Edit Sale ----------------
-@app.route("/edit-sale/<int:id>", methods=["GET", "POST"])
-def edit_sale(id):
-
-    cur = mysql.connection.cursor()
-
-    if request.method == "POST":
-
-        customer_name = request.form["customer_name"]
-        drug_name = request.form["drug_name"]
-        quantity = int(request.form["quantity"])
-        total_amount = float(request.form["total_amount"])
-
-        cur.execute("""
-        UPDATE sales
-        SET
-            customer_name=%s,
-            drug_name=%s,
-            quantity=%s,
-            total_amount=%s
-        WHERE id=%s
-        """, (
-            customer_name,
-            drug_name,
-            quantity,
-            total_amount,
-            id
-        ))
-
-        mysql.connection.commit()
-        cur.close()
-
-        return redirect(url_for("sales"))
-
-    cur.execute("SELECT * FROM sales WHERE id=%s", (id,))
-    sale = cur.fetchone()
-
-    cur.close()
-
-    return render_template("edit_sale.html", sale=sale)
-
-
-# ---------------- Delete Sale ----------------
 @app.route("/delete-sale/<int:id>")
 def delete_sale(id):
 
     cur = mysql.connection.cursor()
 
     cur.execute("DELETE FROM sales WHERE id=%s", (id,))
+
     mysql.connection.commit()
 
     cur.close()
 
     return redirect(url_for("sales"))
-
 
 @app.route("/invoice/<int:id>")
 def invoice(id):
@@ -448,12 +401,7 @@ def invoice(id):
     cur = mysql.connection.cursor()
 
     cur.execute("""
-        SELECT
-            customer_name,
-            drug_name,
-            quantity,
-            total_amount,
-            sale_date
+        SELECT *
         FROM sales
         WHERE id=%s
     """, (id,))
@@ -462,157 +410,156 @@ def invoice(id):
 
     cur.close()
 
-    if not invoice:
-        return "Invoice not found!"
-
     return render_template(
         "invoice.html",
         invoice=invoice
     )
 
-# ---------- Reports ----------
+# ==========================
+# Reports
+# ==========================
+
 @app.route("/reports")
 def reports():
 
-    search = request.args.get("search", "")
-    from_date = request.args.get("from_date", "")
-    to_date = request.args.get("to_date", "")
-
     cur = mysql.connection.cursor()
 
-    query = """
-    SELECT
-        id,
-        drug_name,
-        stock,
-        (stock * price) AS subtotal,
-        expiry_date
-    FROM drugs
-    WHERE 1=1
-    """
+    # Total Drugs
+    cur.execute("SELECT COUNT(*) FROM drugs")
+    total_drugs = cur.fetchone()[0]
 
-    params = []
+    # Total Sales
+    try:
+        cur.execute("SELECT COUNT(*) FROM sales")
+        total_sales = cur.fetchone()[0]
+    except:
+        total_sales = 0
 
-    if search:
-        query += " AND drug_name LIKE %s"
-        params.append("%" + search + "%")
+    # Total Revenue
+    try:
+        cur.execute("SELECT SUM(total_amount) FROM sales")
+        revenue = cur.fetchone()[0]
+        total_revenue = revenue if revenue else 0
+    except:
+        total_revenue = 0
 
-    if from_date:
-        query += " AND expiry_date >= %s"
-        params.append(from_date)
+    # Low Stock Count
+    cur.execute("SELECT COUNT(*) FROM drugs WHERE stock <= 10")
+    low_stock_count = cur.fetchone()[0]
 
-    if to_date:
-        query += " AND expiry_date <= %s"
-        params.append(to_date)
+    # Low Stock Drugs
+    cur.execute("""
+        SELECT
+            id,
+            drug_name,
+            brand_name,
+            category,
+            stock
+        FROM drugs
+        WHERE stock <= 10
+        ORDER BY stock ASC
+    """)
+    low_stock_drugs = cur.fetchall()
 
-    query += " ORDER BY expiry_date ASC"
-
-    cur.execute(query, tuple(params))
-
-    reports = cur.fetchall()
+    # Expiry Drugs
+    cur.execute("""
+        SELECT
+            id,
+            drug_name,
+            brand_name,
+            category,
+            stock,
+            expiry_date
+        FROM drugs
+        ORDER BY expiry_date ASC
+        LIMIT 10
+    """)
+    expiry_drugs = cur.fetchall()
 
     cur.close()
 
     return render_template(
         "reports.html",
-        reports=reports,
-        search=search,
-        from_date=from_date,
-        to_date=to_date
+        total_drugs=total_drugs,
+        total_sales=total_sales,
+        total_revenue=total_revenue,
+        low_stock_count=low_stock_count,
+        low_stock_drugs=low_stock_drugs,
+        expiry_drugs=expiry_drugs
     )
-    
-@app.route("/reports/pdf")
-def report_pdf():
+
+# ==========================
+# Settings
+# ==========================
+
+@app.route("/settings", methods=["GET", "POST"])
+def settings():
 
     cur = mysql.connection.cursor()
 
-    cur.execute("""
-        SELECT drug_name, stock, price, (stock * price)
-        FROM drugs
-        ORDER BY drug_name
-    """)
+    if request.method == "POST":
+        full_name = request.form["full_name"]
+        email = request.form["email"]
+        phone = request.form["phone"]
 
-    data = cur.fetchall()
+        cur.execute("""
+            UPDATE admin_profile
+            SET full_name=%s,
+                email=%s,
+                phone=%s
+            WHERE id=1
+        """, (full_name, email, phone))
+
+        mysql.connection.commit()
+
+    cur.execute("SELECT * FROM admin_profile WHERE id=1")
+    profile = cur.fetchone()
+
+    cur.execute("SELECT * FROM pharmacy_settings WHERE id=1")
+    pharmacy = cur.fetchone()
+
+    cur.execute("SELECT * FROM notification_settings WHERE id=1")
+    notification = cur.fetchone()
+
+    cur.execute("SELECT * FROM theme_settings WHERE id=1")
+    theme = cur.fetchone()
+
     cur.close()
 
-    pdf_file = "PIMS_Report.pdf"
+    return render_template(
+        "settings.html",
+        profile=profile,
+        pharmacy=pharmacy,
+        notification=notification,
+        theme=theme
+    )
 
-    doc = SimpleDocTemplate(pdf_file)
+@app.route("/reports/pdf")
+def report_pdf():
 
-    table_data = [["Drug Name", "Stock", "Price", "Subtotal"]]
-
-    for row in data:
-        table_data.append(list(row))
-
-    table = Table(table_data)
-
-    table.setStyle(TableStyle([
-        ("BACKGROUND", (0,0), (-1,0), colors.green),
-        ("TEXTCOLOR", (0,0), (-1,0), colors.white),
-        ("GRID", (0,0), (-1,-1), 1, colors.black),
-        ("BACKGROUND", (0,1), (-1,-1), colors.beige),
-        ("ALIGN", (0,0), (-1,-1), "CENTER"),
-    ]))
-
-    doc.build([table])
-
-    return send_file(pdf_file, as_attachment=True)
-
-
+    return send_file(
+        "PIMS_Report.pdf",
+        as_attachment=True
+    )
 
 @app.route("/reports/excel")
 def export_excel():
 
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "PIMS Report"
-
-    ws.append([
-        "Drug Name",
-        "Quantity",
-        "Price",
-        "Subtotal",
-        "Expiry Date"
-    ])
-
-    cur = mysql.connection.cursor()
-
-    cur.execute("""
-        SELECT
-            drug_name,
-            stock,
-            price,
-            (stock*price),
-            expiry_date
-        FROM drugs
-        ORDER BY drug_name
-    """)
-
-    for row in cur.fetchall():
-        ws.append(row)
-
-    cur.close()
-
-    filename = "PIMS_Report.xlsx"
-    wb.save(filename)
-
     return send_file(
-        filename,
-        as_attachment=True,
-        download_name="PIMS_Report.xlsx"
+        "PIMS_Report.xlsx",
+        as_attachment=True
     )
 
-# ---------------- Test Database ----------------
 @app.route("/testdb")
 def testdb():
 
     cur = mysql.connection.cursor()
+
     cur.execute("SELECT 1")
+
     cur.close()
 
     return "MySQL Connected Successfully!"
 
-
-# ---------------- Run App ----------------
 if __name__ == "__main__":
     app.run(debug=True)
