@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -21,17 +22,18 @@ font-family:'Segoe UI',sans-serif;
 
 body{
 background:#eef2ff;
+overflow-x:hidden;
 }
 
 .sidebar{
 position:fixed;
-top:0;
 left:0;
+top:0;
 width:260px;
 height:100vh;
 background:linear-gradient(180deg,#4f46e5,#7c3aed);
 padding:25px;
-color:#fff;
+color:white;
 }
 
 .logo{
@@ -46,7 +48,7 @@ display:block;
 padding:14px 18px;
 margin-bottom:10px;
 text-decoration:none;
-color:#fff;
+color:white;
 border-radius:12px;
 transition:.3s;
 }
@@ -62,21 +64,45 @@ padding:25px;
 }
 
 .header{
-background:#fff;
+background:white;
 padding:20px;
 border-radius:18px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-box-shadow:0 8px 25px rgba(0,0,0,.08);
+box-shadow:0 8px 20px rgba(0,0,0,.08);
 margin-bottom:25px;
 }
 
-.card{
-border:none;
+.card-box{
+background:white;
+padding:25px;
 border-radius:18px;
 box-shadow:0 8px 20px rgba(0,0,0,.08);
+transition:.3s;
+height:100%;
 }
+
+.card-box:hover{
+transform:translateY(-5px);
+}
+
+.icon{
+width:60px;
+height:60px;
+border-radius:50%;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:26px;
+color:white;
+margin-bottom:15px;
+}
+
+.bg1{background:#3b82f6;}
+.bg2{background:#22c55e;}
+.bg3{background:#f59e0b;}
+.bg4{background:#ef4444;}
 
 </style>
 
@@ -109,8 +135,13 @@ Sales
 </a>
 
 <a href="/reports" class="active">
-<i class="bi bi-bar-chart-fill"></i>
+<i class="bi bi-bar-chart"></i>
 Reports
+</a>
+
+<a href="/settings">
+<i class="bi bi-gear"></i>
+Settings
 </a>
 
 <a href="/">
@@ -130,273 +161,326 @@ Logout
 
 <h3>📊 Reports Dashboard</h3>
 
-<small>Sales, Stock & Inventory Reports</small>
+<small>Sales, Stock and Expiry Reports</small>
 
 </div>
 
-<a href="javascript:window.print()" class="btn btn-success">
-<i class="bi bi-printer"></i>
-Print Report
+<div>
+
+<a href="/reports/pdf" class="btn btn-danger me-2">
+
+<i class="bi bi-file-earmark-pdf"></i>
+
+PDF
+
+</a>
+
+<a href="/reports/excel" class="btn btn-success">
+
+<i class="bi bi-file-earmark-excel"></i>
+
+Excel
+
 </a>
 
 </div>
 
-<!-- Report Cards -->
+</div>
+
+<!-- Dashboard Cards -->
 
 <div class="row g-4">
 
-    <!-- Total Drugs -->
-    <div class="col-lg-3 col-md-6">
+<div class="col-lg-3">
 
-        <div class="card bg-primary text-white">
+<div class="card-box">
 
-            <div class="card-body">
+<div class="icon bg1">
 
-                <h6>Total Drugs</h6>
-
-                <h2>{{ total_drugs }}</h2>
-
-                <i class="bi bi-capsule display-5"></i>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Total Sales -->
-    <div class="col-lg-3 col-md-6">
-
-        <div class="card bg-success text-white">
-
-            <div class="card-body">
-
-                <h6>Total Sales</h6>
-
-                <h2>{{ total_sales }}</h2>
-
-                <i class="bi bi-cart-check display-5"></i>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Revenue -->
-    <div class="col-lg-3 col-md-6">
-
-        <div class="card bg-warning text-dark">
-
-            <div class="card-body">
-
-                <h6>Total Revenue</h6>
-
-                <h2>₹{{ total_revenue }}</h2>
-
-                <i class="bi bi-currency-rupee display-5"></i>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Low Stock -->
-    <div class="col-lg-3 col-md-6">
-
-        <div class="card bg-danger text-white">
-
-            <div class="card-body">
-
-                <h6>Low Stock</h6>
-
-                <h2>{{ low_stock_count }}</h2>
-
-                <i class="bi bi-exclamation-triangle-fill display-5"></i>
-
-            </div>
-
-        </div>
-
-    </div>
+<i class="bi bi-capsule"></i>
 
 </div>
 
-<br>
+<h2>{{ total_drugs }}</h2>
 
+<p>Total Drugs</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card-box">
+
+<div class="icon bg2">
+
+<i class="bi bi-cart-check"></i>
+
+</div>
+
+<h2>{{ total_sales }}</h2>
+
+<p>Total Sales</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card-box">
+
+<div class="icon bg3">
+
+<i class="bi bi-currency-rupee"></i>
+
+</div>
+
+<h2>₹{{ total_revenue }}</h2>
+
+<p>Total Revenue</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3">
+
+<div class="card-box">
+
+<div class="icon bg4">
+
+<i class="bi bi-exclamation-triangle"></i>
+
+</div>
+
+<h2>{{ low_stock_count }}</h2>
+
+<p>Low Stock Items</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ========================= -->
+<!-- Search -->
+<!-- ========================= -->
+
+<div class="card-box mt-4">
+
+<div class="row">
+
+<div class="col-md-8">
+
+<input
+type="text"
+id="reportSearch"
+class="form-control"
+placeholder="🔍 Search Drug Name..."
+onkeyup="searchReport()">
+
+</div>
+
+<div class="col-md-4">
+
+<a href="/reports/excel"
+class="btn btn-success w-100">
+
+<i class="bi bi-file-earmark-excel"></i>
+
+Export Excel
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ========================= -->
 <!-- Low Stock Report -->
+<!-- ========================= -->
 
-<div class="card shadow border-0 rounded-4 mb-4">
+<div class="card-box mt-4">
 
-    <div class="card-header bg-danger text-white">
+<h4 class="mb-3">
 
-        <h5 class="mb-0">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-            Low Stock Medicines
-        </h5>
+<i class="bi bi-exclamation-triangle-fill text-danger"></i>
 
-    </div>
+Low Stock Report
 
-    <div class="card-body">
+</h4>
 
-        <div class="table-responsive">
+<div class="table-responsive">
 
-            <table class="table table-hover align-middle">
+<table
+class="table table-hover align-middle"
+id="reportTable">
 
-                <thead class="table-dark">
+<thead class="table-dark">
 
-                    <tr>
-                        <th>Sr No</th>
-                        <th>Drug Name</th>
-                        <th>Brand</th>
-                        <th>Category</th>
-                        <th>Stock</th>
-                        <th>Status</th>
-                    </tr>
+<tr>
 
-                </thead>
+<th>#</th>
+<th>Drug Name</th>
+<th>Current Stock</th>
+<th>Reorder Level</th>
+<th>Status</th>
 
-                <tbody>
+</tr>
 
-                {% for drug in low_stock_drugs %}
+</thead>
 
-                <tr>
+<tbody>
 
-                    <td>{{ loop.index }}</td>
+{% for drug in low_stock_drugs %}
 
-                    <td>{{ drug[1] }}</td>
+<tr>
 
-                    <td>{{ drug[2] }}</td>
+<td>{{ loop.index }}</td>
 
-                    <td>{{ drug[3] }}</td>
+<td>{{ drug[1] }}</td>
 
-                    <td>{{ drug[4] }}</td>
+<td>{{ drug[2] }}</td>
 
-                    <td>
-                        <span class="badge bg-danger">
-                            Low Stock
-                        </span>
-                    </td>
+<td>{{ drug[3] }}</td>
 
-                </tr>
+<td>
 
-                {% else %}
+<span class="badge bg-danger">
 
-                <tr>
+Low Stock
 
-                    <td colspan="6" class="text-center text-success">
+</span>
 
-                        <i class="bi bi-check-circle-fill"></i>
-                        No Low Stock Medicines
+</td>
 
-                    </td>
+</tr>
 
-                </tr>
+{% endfor %}
 
-                {% endfor %}
+</tbody>
 
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
+</table>
 
 </div>
 
-<!-- Expiry Medicines Report -->
+</div>
 
-<div class="card shadow border-0 rounded-4 mb-4">
+<!-- ========================= -->
+<!-- Expiry Report -->
+<!-- ========================= -->
 
-    <div class="card-header bg-warning">
+<div class="card-box mt-4">
 
-        <h5 class="mb-0">
-            <i class="bi bi-clock-history"></i>
-            Expiring Medicines
-        </h5>
+<h4 class="mb-3">
 
-    </div>
+<i class="bi bi-calendar-event text-warning"></i>
 
-    <div class="card-body">
+Expiry Report
 
-        <div class="table-responsive">
+</h4>
 
-            <table class="table table-hover align-middle">
+<div class="table-responsive">
 
-                <thead class="table-dark">
+<table class="table table-hover align-middle">
 
-                    <tr>
-                        <th>Sr No</th>
-                        <th>Drug Name</th>
-                        <th>Brand</th>
-                        <th>Category</th>
-                        <th>Expiry Date</th>
-                        <th>Status</th>
-                    </tr>
+<thead class="table-dark">
 
-                </thead>
+<tr>
 
-                <tbody>
+<th>#</th>
+<th>Drug Name</th>
+<th>Stock</th>
+<th>Expiry Date</th>
 
-                {% for drug in expiry_drugs %}
+</tr>
 
-                <tr>
+</thead>
 
-                    <td>{{ loop.index }}</td>
+<tbody>
 
-                    <td>{{ drug[1] }}</td>
+{% for drug in expiry_drugs %}
 
-                    <td>{{ drug[2] }}</td>
+<tr>
 
-                    <td>{{ drug[3] }}</td>
+<td>{{ loop.index }}</td>
 
-                    <td>{{ drug[5] }}</td>
+<td>{{ drug[1] }}</td>
 
-                    <td>
-                        <span class="badge bg-warning text-dark">
-                            Expiring Soon
-                        </span>
-                    </td>
+<td>{{ drug[2] }}</td>
 
-                </tr>
+<td>{{ drug[3] }}</td>
 
-                {% else %}
+</tr>
 
-                <tr>
+{% endfor %}
 
-                    <td colspan="6" class="text-center text-success">
+</tbody>
 
-                        <i class="bi bi-check-circle-fill"></i>
-                        No Expiring Medicines
-
-                    </td>
-
-                </tr>
-
-                {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
+</table>
 
 </div>
 
+</div>
+<!-- ========================= -->
+<!-- Search JavaScript -->
+<!-- ========================= -->
+
+<script>
+
+function searchReport() {
+
+    let input = document.getElementById("reportSearch").value.toUpperCase();
+
+    let table = document.getElementById("reportTable");
+
+    let tr = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < tr.length; i++) {
+
+        let td = tr[i].getElementsByTagName("td")[1];
+
+        if (td) {
+
+            let txtValue = td.textContent || td.innerText;
+
+            if (txtValue.toUpperCase().indexOf(input) > -1) {
+
+                tr[i].style.display = "";
+
+            } else {
+
+                tr[i].style.display = "none";
+
+            }
+
+        }
+
+    }
+
+}
+
+</script>
+
+<!-- ========================= -->
 <!-- Footer -->
+<!-- ========================= -->
 
-<footer class="text-center mt-5 mb-3 text-muted">
+<footer class="text-center mt-5 text-muted">
 
-    <hr>
+<hr>
 
-    <p class="mb-0">
-        © 2026 <strong>PIMS Premium</strong> |
-        Pharmacy Inventory Management System
-    </p>
+<p class="mb-0">
+
+© 2026 <strong>PIMS Premium</strong> |
+Pharmacy Inventory Management System
+
+</p>
 
 </footer>
 
