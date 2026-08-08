@@ -12,13 +12,14 @@ app = Flask(__name__)
 
 DB_CONFIG = {
     "host": "gateway01.ap-southeast-1.prod.aws.tidbcloud.com",
-    "user": "9uePyKrdnmUXdoN.root",
-    "password": "53pSEKwGkdVb7sdl",
+    "user": "YOUR_USERNAME",
+    "password": "YOUR_PASSWORD",
     "database": "test",
     "port": 4000,
     "charset": "utf8mb4",
     "cursorclass": pymysql.cursors.Cursor,
-    "autocommit": True
+    "autocommit": True,
+    "ssl": {}
 }
 
 def get_connection():
