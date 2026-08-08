@@ -11,15 +11,19 @@ app = Flask(__name__)
 # ---------------- TiDB / MySQL Configuration ----------------
 
 DB_CONFIG = {
-    "host": "gateway01.ap-southeast-1.prod.aws.tidbcloud.com",
-    "user": "YOUR_USERNAME",
-    "password": "YOUR_PASSWORD",
-    "database": "test",
-    "port": 4000,
+    "host": os.environ.get("DB_HOST"),
+    "user": os.environ.get("DB_USER"),
+    "password": os.environ.get("DB_PASSWORD"),
+    "database": os.environ.get("DB_NAME", "sys"),
+    "port": int(os.environ.get("DB_PORT", "4000")),
     "charset": "utf8mb4",
     "cursorclass": pymysql.cursors.Cursor,
     "autocommit": True,
-    "ssl": {}
+
+    "ssl": {
+        "ssl_verify_cert": False,
+        "ssl_verify_identity": False
+    }
 }
 
 def get_connection():
