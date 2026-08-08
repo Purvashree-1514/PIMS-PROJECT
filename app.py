@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, send_file
 import pymysql
+import os
 from datetime import date, timedelta
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib import colors
@@ -42,11 +43,11 @@ def login():
 
         if username == USERNAME and password == PASSWORD:
             return redirect(url_for("dashboard"))
-        else:
-            return render_template(
-                "login.html",
-                error="Invalid Username or Password"
-            )
+
+        return render_template(
+            "login.html",
+            error="Invalid Username or Password"
+        )
 
     return render_template("login.html")
 
@@ -432,18 +433,29 @@ def delete_sale(id):
 def invoice(id):
 
     conn = get_connection()
-    cur = conn.cursor()
+    cur = conn.cursor(pymysql.cursors.DictCursor)
 
     cur.execute("""
-        SELECT *
+        SELECT
+            id,
+            sale_date,
+            invoice_no,
+            customer_name,
+            drug_name,
+            quantity,
+            price,
+            payment_method
         FROM sales
-        WHERE id=%s
-    """,(id,))
+        WHERE id = %s
+    """, (id,))
 
     invoice = cur.fetchone()
 
     cur.close()
     conn.close()
+
+    if not invoice:
+        return "Invoice not found", 404
 
     return render_template(
         "invoice.html",
@@ -571,13 +583,16 @@ def settings():
 
 @app.route("/reports/pdf")
 def report_pdf():
+    pdf_path = os.path.join(app.root_path, "PIMS_Report.pdf")
+
+    if not os.path.exists(pdf_path):
+        return "PIMS_Report.pdf file not found. Please generate the report first.", 404
 
     return send_file(
-        "PIMS_Report.pdf",
-        as_attachment=True
+        pdf_path,
+        as_attachment=True,
+        download_name="PIMS_Report.pdf"
     )
-
-
 # ==========================
 # Excel Export
 # ==========================
