@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -14,556 +13,1093 @@
 <style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
 }
 
 body{
-background:#eef2ff;
-overflow-x:hidden;
+    background:#eef2ff;
+    overflow-x:hidden;
 }
 
 .sidebar{
-position:fixed;
-left:0;
-top:0;
-width:260px;
-height:100vh;
-background:linear-gradient(180deg,#4f46e5,#7c3aed);
-padding:25px;
-color:white;
-box-shadow:0 10px 30px rgba(0,0,0,.2);
+    position:fixed;
+    left:0;
+    top:0;
+    width:260px;
+    height:100vh;
+    background:linear-gradient(180deg,#4f46e5,#7c3aed);
+    padding:25px;
+    color:white;
+    box-shadow:10px 0 30px rgba(0,0,0,.15);
 }
 
 .logo{
-font-size:28px;
-font-weight:bold;
-text-align:center;
-margin-bottom:35px;
+    font-size:25px;
+    font-weight:bold;
+    text-align:center;
+    margin-bottom:35px;
 }
 
 .sidebar a{
-display:block;
-padding:14px 18px;
-text-decoration:none;
-color:white;
-border-radius:12px;
-margin-bottom:10px;
-transition:.3s;
+    display:block;
+    padding:14px 18px;
+    text-decoration:none;
+    color:white;
+    border-radius:12px;
+    margin-bottom:10px;
+    transition:.3s;
 }
 
 .sidebar a:hover,
 .sidebar a.active{
-background:rgba(255,255,255,.18);
-transform:translateX(6px);
+    background:rgba(255,255,255,.18);
+    transform:translateX(5px);
 }
 
 .main{
-margin-left:260px;
-padding:25px;
+    margin-left:260px;
+    padding:25px;
 }
 
 .header{
-background:white;
-padding:20px;
-border-radius:18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-box-shadow:0 8px 25px rgba(0,0,0,.08);
-margin-bottom:25px;
+    background:white;
+    padding:20px;
+    border-radius:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    margin-bottom:25px;
+}
+
+.header h3{
+    margin-bottom:4px;
 }
 
 .card-box{
-background:white;
-padding:25px;
-border-radius:20px;
-box-shadow:0 8px 25px rgba(0,0,0,.08);
-transition:.3s;
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    transition:.3s;
 }
 
 .card-box:hover{
-transform:translateY(-5px);
+    transform:translateY(-3px);
 }
 
 .icon{
-width:60px;
-height:60px;
-border-radius:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:26px;
-color:white;
-margin-bottom:15px;
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:26px;
+    color:white;
+    margin-bottom:15px;
 }
 
-.bg1{background:#22c55e;}
-.bg2{background:#3b82f6;}
-.bg3{background:#f59e0b;}
-.bg4{background:#ef4444;}
+.bg1{
+    background:#22c55e;
+}
+
+.bg2{
+    background:#3b82f6;
+}
+
+.bg3{
+    background:#f59e0b;
+}
+
+.bg4{
+    background:#ef4444;
+}
+
+.form-control,
+.form-select{
+    border-radius:10px;
+    padding:11px;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color:#4f46e5;
+    box-shadow:0 0 0 .2rem rgba(79,70,229,.15);
+}
+
+.readonly-field{
+    background:#f8fafc;
+    font-weight:600;
+}
+
+.table{
+    margin-bottom:0;
+}
+
+.table th{
+    white-space:nowrap;
+}
+
+.table td{
+    vertical-align:middle;
+}
+
+@media(max-width:900px){
+
+    .sidebar{
+        width:210px;
+    }
+
+    .main{
+        margin-left:210px;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+    }
+
+    .main{
+        margin-left:0;
+        padding:15px;
+    }
+
+    .header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
+}
 
 </style>
-
 </head>
 
 <body>
 
+<!-- SIDEBAR -->
+
 <div class="sidebar">
 
-<div class="logo">
-<i class="bi bi-hospital"></i><br>
-PIMS Premium
+    <div class="logo">
+        <i class="bi bi-hospital"></i>
+        <br>
+        PIMS Premium
+    </div>
+
+    <a href="/dashboard">
+        <i class="bi bi-speedometer2"></i>
+        Dashboard
+    </a>
+
+    <a href="/drugs">
+        <i class="bi bi-capsule"></i>
+        Drug Management
+    </a>
+
+    <a href="/sales" class="active">
+        <i class="bi bi-cart-check"></i>
+        Sales
+    </a>
+
+    <a href="/reports">
+        <i class="bi bi-bar-chart"></i>
+        Reports
+    </a>
+
+    <a href="/settings">
+        <i class="bi bi-gear"></i>
+        Settings
+    </a>
+
+    <a href="/logout">
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+    </a>
+
 </div>
 
-<a href="/dashboard">
-<i class="bi bi-speedometer2"></i>
-Dashboard
-</a>
 
-<a href="/drugs">
-<i class="bi bi-capsule"></i>
-Drug Management
-</a>
-
-<a href="/sales" class="active">
-<i class="bi bi-cart-check"></i>
-Sales
-</a>
-
-<a href="/reports">
-<i class="bi bi-bar-chart"></i>
-Reports
-</a>
-
-<a href="/settings">
-<i class="bi bi-gear"></i>
-Settings
-</a>
-
-<a href="/">
-<i class="bi bi-box-arrow-right"></i>
-Logout
-</a>
-
-</div>
+<!-- MAIN -->
 
 <div class="main">
 
+<!-- HEADER -->
+
 <div class="header">
 
-<div>
+    <div>
 
-<h3>💰 Sales Dashboard</h3>
+        <h3>
+            💰 Sales Dashboard
+        </h3>
 
-<small>Manage pharmacy sales and invoices</small>
+        <small>
+            Manage pharmacy sales and invoices
+        </small>
+
+    </div>
+
+    <a href="#newSale"
+       class="btn btn-primary btn-lg">
+
+        <i class="bi bi-plus-circle"></i>
+
+        New Sale
+
+    </a>
 
 </div>
 
-<a href="#newSale" class="btn btn-primary btn-lg">
 
-<i class="bi bi-plus-circle"></i>
-
-New Sale
-
-</a>
-
-</div>
+<!-- DASHBOARD CARDS -->
 
 <div class="row g-4">
 
-<div class="col-lg-3">
+    <!-- TOTAL SALES -->
 
-<div class="card-box">
+    <div class="col-lg-3 col-md-6">
 
-<div class="icon bg1">
+        <div class="card-box">
 
-<i class="bi bi-currency-rupee"></i>
+            <div class="icon bg1">
 
-</div>
+                <i class="bi bi-currency-rupee"></i>
 
-<h2>{{ total_sales }}</h2>
+            </div>
 
-<p>Total Sales</p>
+            <h2>
+                ₹{{ "%.2f"|format(total_sales|float) }}
+            </h2>
 
-</div>
+            <p>
+                Total Sales
+            </p>
 
-</div>
+        </div>
 
-<div class="col-lg-3">
+    </div>
 
-<div class="card-box">
 
-<div class="icon bg2">
+    <!-- TOTAL BILLS -->
 
-<i class="bi bi-receipt"></i>
+    <div class="col-lg-3 col-md-6">
 
-</div>
+        <div class="card-box">
 
-<h2>{{ sales|length }}</h2>
+            <div class="icon bg2">
 
-<p>Total Bills</p>
+                <i class="bi bi-receipt"></i>
 
-</div>
+            </div>
 
-</div>
+            <h2>
+                {{ sales|length }}
+            </h2>
 
-<div class="col-lg-3">
+            <p>
+                Total Bills
+            </p>
 
-<div class="card-box">
+        </div>
 
-<div class="icon bg3">
+    </div>
 
-<i class="bi bi-capsule"></i>
 
-</div>
+    <!-- AVAILABLE DRUGS -->
 
-<h2>{{ drugs|length }}</h2>
+    <div class="col-lg-3 col-md-6">
 
-<p>Available Drugs</p>
+        <div class="card-box">
 
-</div>
+            <div class="icon bg3">
 
-</div>
+                <i class="bi bi-capsule"></i>
 
-<div class="col-lg-3">
+            </div>
 
-<div class="card-box">
+            <h2>
+                {{ drugs|length }}
+            </h2>
 
-<div class="icon bg4">
+            <p>
+                Available Drugs
+            </p>
 
-<i class="bi bi-graph-up-arrow"></i>
+        </div>
 
-</div>
+    </div>
 
-<h2>{{ sales|length }}</h2>
 
-<p>Completed Sales</p>
+    <!-- COMPLETED SALES -->
 
-</div>
+    <div class="col-lg-3 col-md-6">
 
-</div>
+        <div class="card-box">
 
-</div>
+            <div class="icon bg4">
 
-<div class="card-box mt-4" id="newSale">
+                <i class="bi bi-graph-up-arrow"></i>
 
-<h4 class="mb-4">
+            </div>
 
-<i class="bi bi-cart-plus text-primary"></i>
+            <h2>
+                {{ sales|length }}
+            </h2>
 
-Create New Sale
+            <p>
+                Completed Sales
+            </p>
 
-</h4>
+        </div>
 
-<form action="/save_sale" method="POST">
-
-<div class="row">
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">Customer Name</label>
-
-<input
-type="text"
-name="customer_name"
-class="form-control"
-required>
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">Drug Name</label>
-
-<select
-name="drug_name"
-class="form-select"
-required>
-
-<option value="">Select Drug</option>
-
-{% for drug in drugs %}
-
-<option value="{{ drug[1] }}">
-{{ drug[1] }}
-</option>
-
-{% endfor %}
-
-</select>
-
-</div>
-<div class="col-md-3 mb-3">
-
-<label class="form-label">
-Quantity
-</label>
-
-<input
-type="number"
-name="quantity"
-class="form-control"
-min="1"
-required>
+    </div>
 
 </div>
 
-<div class="col-md-3 mb-3">
 
-<label class="form-label">
-Price (₹)
-</label>
+<!-- CREATE NEW SALE -->
 
-<input
-type="number"
-step="0.01"
-name="price"
-class="form-control"
-required>
+<div class="card-box mt-4"
+     id="newSale">
+
+    <h4 class="mb-4">
+
+        <i class="bi bi-cart-plus text-primary"></i>
+
+        Create New Sale
+
+    </h4>
+
+
+    <form action="/save_sale"
+          method="POST"
+          onsubmit="return validateSaleForm()">
+
+        <div class="row">
+
+
+            <!-- CUSTOMER -->
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Customer Name
+                </label>
+
+                <input
+                    type="text"
+                    name="customer_name"
+                    class="form-control"
+                    placeholder="Enter customer name"
+                    required>
+
+            </div>
+
+
+            <!-- DRUG -->
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Drug Name
+                </label>
+
+                <select
+                    name="drug_id"
+                    id="drug_id"
+                    class="form-select"
+                    onchange="loadDrugDetails()"
+                    required>
+
+                    <option value="">
+                        Select Drug
+                    </option>
+
+                    {% for drug in drugs %}
+
+                    <option value="{{ drug.id }}">
+                        {{ drug.drug_name }}
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- QUANTITY -->
+
+            <div class="col-md-3 mb-3">
+
+                <label class="form-label">
+                    Quantity
+                </label>
+
+                <input
+                    type="number"
+                    name="quantity"
+                    id="quantity"
+                    class="form-control"
+                    min="1"
+                    value="1"
+                    oninput="calculateTotal()"
+                    required>
+
+            </div>
+
+
+            <!-- PRICE -->
+
+            <div class="col-md-3 mb-3">
+
+                <label class="form-label">
+                    Price (₹)
+                </label>
+
+                <input
+                    type="number"
+                    name="price"
+                    id="price"
+                    class="form-control readonly-field"
+                    step="0.01"
+                    readonly>
+
+            </div>
+
+
+            <!-- AVAILABLE STOCK -->
+
+            <div class="col-md-3 mb-3">
+
+                <label class="form-label">
+                    Available Stock
+                </label>
+
+                <input
+                    type="number"
+                    id="available_stock"
+                    class="form-control readonly-field"
+                    readonly>
+
+            </div>
+
+
+            <!-- TOTAL AMOUNT -->
+
+            <div class="col-md-3 mb-3">
+
+                <label class="form-label">
+                    Total Amount (₹)
+                </label>
+
+                <input
+                    type="number"
+                    name="total_amount"
+                    id="total_amount"
+                    class="form-control readonly-field"
+                    step="0.01"
+                    readonly>
+
+            </div>
+
+
+            <!-- PAYMENT -->
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Payment Method
+                </label>
+
+                <select
+                    name="payment_method"
+                    class="form-select">
+
+                    <option value="Cash">
+                        Cash
+                    </option>
+
+                    <option value="UPI">
+                        UPI
+                    </option>
+
+                    <option value="Card">
+                        Card
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- SALE DATE -->
+
+            <div class="col-md-6 mb-3">
+
+                <label class="form-label">
+                    Sale Date
+                </label>
+
+                <input
+                    type="date"
+                    name="sale_date"
+                    id="sale_date"
+                    class="form-control">
+
+            </div>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <button
+            type="submit"
+            class="btn btn-success btn-lg">
+
+            <i class="bi bi-check-circle"></i>
+
+            Save Sale
+
+        </button>
+
+
+        <button
+            type="reset"
+            class="btn btn-secondary btn-lg ms-2"
+            onclick="resetSaleForm()">
+
+            <i class="bi bi-arrow-clockwise"></i>
+
+            Reset
+
+        </button>
+
+    </form>
 
 </div>
 
-<div class="col-md-6 mb-3">
 
-<label class="form-label">
-Payment Method
-</label>
-
-<select
-name="payment_method"
-class="form-select">
-
-<option>Cash</option>
-<option>UPI</option>
-<option>Card</option>
-
-</select>
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Sale Date
-</label>
-
-<input
-type="date"
-name="sale_date"
-class="form-control">
-
-</div>
-
-</div>
-
-<button
-type="submit"
-class="btn btn-success btn-lg">
-
-<i class="bi bi-check-circle"></i>
-
-Save Sale
-
-</button>
-
-<button
-type="reset"
-class="btn btn-secondary btn-lg ms-2">
-
-<i class="bi bi-arrow-clockwise"></i>
-
-Reset
-
-</button>
-
-</form>
-
-</div>
-
-<!-- Search -->
+<!-- SEARCH + EXCEL -->
 
 <div class="card-box mt-4">
 
-<div class="row">
+    <div class="row g-3">
 
-<div class="col-md-8">
+        <div class="col-md-8">
 
-<input
-type="text"
-id="searchInput"
-class="form-control"
-placeholder="🔍 Search Customer / Invoice..."
-onkeyup="searchSales()">
+            <input
+                type="text"
+                id="searchInput"
+                class="form-control"
+                placeholder="🔍 Search Customer / Invoice..."
+                onkeyup="searchSales()">
+
+        </div>
+
+        <div class="col-md-4">
+
+            <a
+                href="/reports/excel"
+                class="btn btn-success w-100">
+
+                <i class="bi bi-file-earmark-excel"></i>
+
+                Export Excel
+
+            </a>
+
+        </div>
+
+    </div>
 
 </div>
 
-<div class="col-md-4">
 
-<a
-href="/reports/excel"
-class="btn btn-success w-100">
-
-<i class="bi bi-file-earmark-excel"></i>
-
-Export Excel
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- Sales History -->
+<!-- SALES HISTORY -->
 
 <div class="card-box mt-4">
 
-<h4 class="mb-3">
+    <h4 class="mb-3">
 
-<i class="bi bi-receipt-cutoff text-primary"></i>
+        <i class="bi bi-receipt-cutoff text-primary"></i>
 
-Sales History
+        Sales History
 
-</h4>
+    </h4>
 
-<div class="table-responsive">
 
-<table
-class="table table-hover align-middle"
-id="salesTable">
+    <div class="table-responsive">
 
-<thead class="table-dark">
+        <table
+            class="table table-hover align-middle"
+            id="salesTable">
 
-<tr>
+            <thead class="table-dark">
 
-<th>#</th>
-<th>Invoice</th>
-<th>Customer</th>
-<th>Drug</th>
-<th>Qty</th>
-<th>Total</th>
-<th>Date</th>
-<th>Status</th>
-<th>Action</th>
+                <tr>
 
-</tr>
+                    <th>#</th>
+                    <th>Invoice</th>
+                    <th>Customer</th>
+                    <th>Drug</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                    <th>Payment</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
 
-</thead>
+                </tr>
 
-<tbody>
+            </thead>
 
-{% for sale in sales %}
 
-<tr>
+            <tbody>
 
-<td>{{ loop.index }}</td>
+            {% for sale in sales %}
 
-<td>{{ sale[1] }}</td>
+                <tr>
 
-<td>{{ sale[2] }}</td>
+                    <td>
+                        {{ loop.index }}
+                    </td>
 
-<td>{{ sale[3] }}</td>
+                    <td>
+                        {{ sale.invoice_no }}
+                    </td>
 
-<td>{{ sale[4] }}</td>
+                    <td>
+                        {{ sale.customer_name }}
+                    </td>
 
-<td>₹{{ sale[6] }}</td>
+                    <td>
+                        {{ sale.drug_name }}
+                    </td>
 
-<td>{{ sale[8] }}</td>
+                    <td>
+                        {{ sale.quantity }}
+                    </td>
 
-<td>
+                    <td>
+                        ₹{{ "%.2f"|format(sale.price|float) }}
+                    </td>
 
-{% if sale[9] == "Paid" %}
+                    <td>
+                        <strong>
+                            ₹{{ "%.2f"|format(sale.total_amount|float) }}
+                        </strong>
+                    </td>
 
-<span class="badge bg-success">
+                    <td>
+                        {{ sale.payment_method }}
+                    </td>
 
-Paid
+                    <td>
+                        {{ sale.sale_date }}
+                    </td>
 
-</span>
+                    <td>
 
-{% else %}
+                        {% if sale.status == "Paid" %}
 
-<span class="badge bg-warning text-dark">
+                        <span class="badge bg-success">
+                            Paid
+                        </span>
 
-{{ sale[9] }}
+                        {% else %}
 
-</span>
+                        <span class="badge bg-warning text-dark">
+                            {{ sale.status }}
+                        </span>
 
-{% endif %}
+                        {% endif %}
 
-</td>
+                    </td>
 
-<td>
+                    <td>
 
-<a
-href="/invoice/{{ sale[0] }}"
-class="btn btn-primary btn-sm">
+                        <a
+                            href="/invoice/{{ sale.id }}"
+                            class="btn btn-primary btn-sm"
+                            title="View Invoice">
 
-<i class="bi bi-eye"></i>
+                            <i class="bi bi-eye"></i>
 
-</a>
+                        </a>
 
-<a
-href="/delete-sale/{{ sale[0] }}"
-class="btn btn-danger btn-sm"
-onclick="return confirm('Delete this sale?')">
 
-<i class="bi bi-trash"></i>
+                        <a
+                            href="/delete-sale/{{ sale.id }}"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Delete this sale?')"
+                            title="Delete Sale">
 
-</a>
+                            <i class="bi bi-trash"></i>
 
-</td>
+                        </a>
 
-</tr>
+                    </td>
 
-{% endfor %}
+                </tr>
 
-</tbody>
+            {% endfor %}
 
-</table>
+
+            {% if not sales %}
+
+                <tr>
+
+                    <td
+                        colspan="11"
+                        class="text-center text-muted py-4">
+
+                        No sales found.
+
+                    </td>
+
+                </tr>
+
+            {% endif %}
+
+            </tbody>
+
+        </table>
+
+    </div>
 
 </div>
 
+
+<footer class="text-center mt-5 text-muted">
+
+    <hr>
+
+    <p>
+        © 2026
+        <strong>PIMS Premium</strong>
+        |
+        Pharmacy Inventory Management System
+    </p>
+
+</footer>
+
 </div>
-<!-- ========================= -->
-<!-- Search JavaScript -->
-<!-- ========================= -->
+
+
+<!-- JAVASCRIPT -->
 
 <script>
 
-function searchSales() {
+async function loadDrugDetails(){
 
-    let input = document.getElementById("searchInput").value.toUpperCase();
+    const drugId =
+        document.getElementById("drug_id").value;
 
-    let table = document.getElementById("salesTable");
+    const priceField =
+        document.getElementById("price");
 
-    let tr = table.getElementsByTagName("tr");
+    const stockField =
+        document.getElementById("available_stock");
 
-    for (let i = 1; i < tr.length; i++) {
+    const quantityField =
+        document.getElementById("quantity");
 
-        let invoice = tr[i].getElementsByTagName("td")[1];
-        let customer = tr[i].getElementsByTagName("td")[2];
+    const totalField =
+        document.getElementById("total_amount");
 
-        if (invoice && customer) {
 
-            let invoiceText = invoice.textContent || invoice.innerText;
-            let customerText = customer.textContent || customer.innerText;
+    priceField.value = "";
+    stockField.value = "";
+    totalField.value = "";
 
-            if (
-                invoiceText.toUpperCase().indexOf(input) > -1 ||
-                customerText.toUpperCase().indexOf(input) > -1
-            ) {
+    quantityField.max = "";
 
-                tr[i].style.display = "";
 
-            } else {
+    if(!drugId){
+        return;
+    }
 
-                tr[i].style.display = "none";
 
-            }
+    try{
+
+        const response =
+            await fetch(
+                "/get-price/" +
+                encodeURIComponent(drugId)
+            );
+
+
+        if(!response.ok){
+            throw new Error("Unable to get drug details");
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if(data.error){
+            throw new Error(data.error);
+        }
+
+
+        const price =
+            Number(data.price) || 0;
+
+        const stock =
+            Number(data.stock) || 0;
+
+
+        priceField.value =
+            price.toFixed(2);
+
+        stockField.value =
+            stock;
+
+        quantityField.max =
+            stock;
+
+
+        if(stock <= 0){
+
+            totalField.value = "";
+
+            alert(
+                "This drug is out of stock."
+            );
+
+            return;
+        }
+
+
+        calculateTotal();
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        priceField.value = "";
+        stockField.value = "";
+        totalField.value = "";
+        quantityField.max = "";
+
+        alert(
+            "Unable to load price and stock for this drug."
+        );
+
+    }
+
+}
+
+
+function calculateTotal(){
+
+    const price =
+        Number(
+            document.getElementById("price").value
+        ) || 0;
+
+
+    const quantity =
+        Number(
+            document.getElementById("quantity").value
+        ) || 0;
+
+
+    const stock =
+        Number(
+            document.getElementById("available_stock").value
+        ) || 0;
+
+
+    const totalField =
+        document.getElementById("total_amount");
+
+
+    if(
+        quantity <= 0 ||
+        price <= 0 ||
+        stock <= 0
+    ){
+
+        totalField.value = "";
+
+        return;
+    }
+
+
+    if(quantity > stock){
+
+        totalField.value = "";
+
+        return;
+    }
+
+
+    const total =
+        price * quantity;
+
+
+    totalField.value =
+        total.toFixed(2);
+
+}
+
+
+function validateSaleForm(){
+
+    const drugId =
+        document.getElementById("drug_id").value;
+
+
+    const quantity =
+        Number(
+            document.getElementById("quantity").value
+        ) || 0;
+
+
+    const price =
+        Number(
+            document.getElementById("price").value
+        ) || 0;
+
+
+    const stock =
+        Number(
+            document.getElementById("available_stock").value
+        ) || 0;
+
+
+    const total =
+        Number(
+            document.getElementById("total_amount").value
+        ) || 0;
+
+
+    if(!drugId){
+
+        alert("Please select a drug.");
+
+        return false;
+    }
+
+
+    if(quantity <= 0){
+
+        alert(
+            "Quantity must be greater than 0."
+        );
+
+        return false;
+    }
+
+
+    if(stock <= 0){
+
+        alert(
+            "Selected drug is out of stock."
+        );
+
+        return false;
+    }
+
+
+    if(quantity > stock){
+
+        alert(
+            "Quantity cannot be greater than available stock (" +
+            stock +
+            ")."
+        );
+
+        return false;
+    }
+
+
+    if(price <= 0){
+
+        alert(
+            "Price is not available for the selected drug."
+        );
+
+        return false;
+    }
+
+
+    if(total <= 0){
+
+        alert(
+            "Total amount could not be calculated."
+        );
+
+        return false;
+    }
+
+
+    return true;
+
+}
+
+
+function searchSales(){
+
+    const input =
+        document
+        .getElementById("searchInput")
+        .value
+        .toUpperCase();
+
+
+    const table =
+        document.getElementById("salesTable");
+
+
+    const rows =
+        table.getElementsByTagName("tr");
+
+
+    for(
+        let i = 1;
+        i < rows.length;
+        i++
+    ){
+
+        const row =
+            rows[i];
+
+
+        const text =
+            row.textContent ||
+            row.innerText;
+
+
+        if(
+            text
+            .toUpperCase()
+            .indexOf(input) > -1
+        ){
+
+            row.style.display = "";
+
+        }
+        else{
+
+            row.style.display = "none";
 
         }
 
@@ -571,27 +1107,67 @@ function searchSales() {
 
 }
 
+
+function resetSaleForm(){
+
+    setTimeout(function(){
+
+        document.getElementById("price").value = "";
+
+        document.getElementById("available_stock").value = "";
+
+        document.getElementById("total_amount").value = "";
+
+        document.getElementById("quantity").max = "";
+
+    },50);
+
+}
+
+
+window.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        const dateField =
+            document.getElementById("sale_date");
+
+
+        if(
+            dateField &&
+            !dateField.value
+        ){
+
+            const today =
+                new Date();
+
+
+            const year =
+                today.getFullYear();
+
+
+            const month =
+                String(
+                    today.getMonth() + 1
+                ).padStart(2,"0");
+
+
+            const day =
+                String(
+                    today.getDate()
+                ).padStart(2,"0");
+
+
+            dateField.value =
+                `${year}-${month}-${day}`;
+
+        }
+
+    }
+);
+
 </script>
 
-<!-- ========================= -->
-<!-- Footer -->
-<!-- ========================= -->
-
-<footer class="text-center mt-5 text-muted">
-
-<hr>
-
-<p class="mb-0">
-
-© 2026 <strong>PIMS Premium</strong> |
-Pharmacy Inventory Management System
-
-</p>
-
-</footer>
-
-</div>
-<!-- End Main -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

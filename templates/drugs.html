@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -13,63 +14,98 @@
 <style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
 }
 
 body{
-background:#eef2ff;
+    background:#eef2ff;
 }
 
 .sidebar{
-position:fixed;
-top:0;
-left:0;
-width:260px;
-height:100vh;
-background:linear-gradient(180deg,#4f46e5,#7c3aed);
-padding:25px;
-color:#fff;
+    position:fixed;
+    top:0;
+    left:0;
+    width:260px;
+    height:100vh;
+    background:linear-gradient(180deg,#4f46e5,#7c3aed);
+    padding:25px;
+    color:#fff;
+    overflow-y:auto;
 }
 
 .logo{
-font-size:28px;
-font-weight:bold;
-text-align:center;
-margin-bottom:35px;
+    font-size:28px;
+    font-weight:bold;
+    text-align:center;
+    margin-bottom:35px;
 }
 
 .sidebar a{
-display:block;
-padding:14px 18px;
-margin-bottom:10px;
-text-decoration:none;
-color:#fff;
-border-radius:12px;
-transition:.3s;
+    display:block;
+    padding:14px 18px;
+    margin-bottom:10px;
+    text-decoration:none;
+    color:#fff;
+    border-radius:12px;
+    transition:.3s;
 }
 
 .sidebar a:hover,
 .sidebar a.active{
-background:rgba(255,255,255,.18);
+    background:rgba(255,255,255,.18);
 }
 
 .main{
-margin-left:260px;
-padding:25px;
+    margin-left:260px;
+    padding:25px;
 }
 
 .header{
-background:#fff;
-padding:20px;
-border-radius:18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-box-shadow:0 8px 25px rgba(0,0,0,.08);
-margin-bottom:25px;
+    background:#fff;
+    padding:20px;
+    border-radius:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    margin-bottom:25px;
+}
+
+.table td,
+.table th{
+    vertical-align:middle;
+    white-space:nowrap;
+}
+
+.table thead th{
+    font-size:14px;
+}
+
+.badge{
+    font-size:12px;
+    padding:7px 10px;
+}
+
+@media(max-width:768px){
+
+    .sidebar{
+        width:210px;
+    }
+
+    .main{
+        margin-left:210px;
+        padding:15px;
+    }
+
+    .header{
+        flex-direction:column;
+        gap:15px;
+        align-items:flex-start;
+    }
+
 }
 
 </style>
@@ -78,95 +114,115 @@ margin-bottom:25px;
 
 <body>
 
-<!-- Sidebar -->
+
+<!-- ================= SIDEBAR ================= -->
 
 <div class="sidebar">
 
-<div class="logo">
-<i class="bi bi-hospital"></i><br>
-PIMS Premium
+    <div class="logo">
+        <i class="bi bi-hospital"></i><br>
+        PIMS Premium
+    </div>
+
+    <a href="/dashboard">
+        <i class="bi bi-speedometer2"></i>
+        Dashboard
+    </a>
+
+    <a href="/drugs" class="active">
+        <i class="bi bi-capsule"></i>
+        Drug Management
+    </a>
+
+    <a href="/sales">
+        <i class="bi bi-cart-check"></i>
+        Sales
+    </a>
+
+    <a href="/reports">
+        <i class="bi bi-bar-chart"></i>
+        Reports
+    </a>
+
+    <a href="/settings">
+        <i class="bi bi-gear"></i>
+        Settings
+    </a>
+
+    <a href="/logout">
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+    </a>
+
 </div>
 
-<a href="/dashboard">
-<i class="bi bi-speedometer2"></i>
-Dashboard
-</a>
 
-<a href="/drugs" class="active">
-<i class="bi bi-capsule"></i>
-Drug Management
-</a>
-
-<a href="/sales">
-<i class="bi bi-cart-check"></i>
-Sales
-</a>
-
-<a href="/reports">
-<i class="bi bi-bar-chart"></i>
-Reports
-</a>
-
-<a href="/">
-<i class="bi bi-box-arrow-right"></i>
-Logout
-</a>
-
-</div>
-
-<!-- Main -->
+<!-- ================= MAIN ================= -->
 
 <div class="main">
 
-<div class="header">
 
-<div>
+    <!-- HEADER -->
 
-<h3>💊 Drug Management</h3>
+    <div class="header">
 
-<small>Manage all medicines and stock</small>
+        <div>
 
-</div>
-<div>
+            <h3>💊 Drug Management</h3>
 
-<a href="/add-drug" class="btn btn-primary btn-lg">
-    <i class="bi bi-plus-circle"></i>
-    Add New Drug
-</a>
+            <small>
+                Manage all medicines and stock
+            </small>
 
-</div>
+        </div>
 
-</div>
+        <div>
 
-<!-- Search Card -->
+            <a href="/add-drug"
+               class="btn btn-primary btn-lg">
 
-<div class="card shadow border-0 rounded-4 mb-4">
+                <i class="bi bi-plus-circle"></i>
 
-    <div class="card-body">
+                Add New Drug
 
-        <div class="row">
+            </a>
 
-            <div class="col-md-8">
+        </div>
 
-                <input
-                    type="text"
-                    id="searchInput"
-                    class="form-control form-control-lg"
-                    placeholder="🔍 Search Drug Name..."
-                    onkeyup="searchDrug()">
+    </div>
 
-            </div>
 
-            <div class="col-md-4">
+    <!-- ================= SEARCH ================= -->
 
-                <a href="/add-drug"
-                   class="btn btn-success btn-lg w-100">
+    <div class="card shadow border-0 rounded-4 mb-4">
 
-                    <i class="bi bi-plus-circle"></i>
+        <div class="card-body">
 
-                    Add New Drug
+            <div class="row g-3">
 
-                </a>
+                <div class="col-md-8">
+
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="form-control form-control-lg"
+                        placeholder="🔍 Search Drug Name..."
+                        onkeyup="searchDrug()">
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <a href="/add-drug"
+                       class="btn btn-success btn-lg w-100">
+
+                        <i class="bi bi-plus-circle"></i>
+
+                        Add New Drug
+
+                    </a>
+
+                </div>
 
             </div>
 
@@ -174,143 +230,349 @@ Logout
 
     </div>
 
+
+    <!-- ================= DRUG INVENTORY ================= -->
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-capsule"></i>
+
+                Drug Inventory
+
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle"
+                       id="drugTable">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>Sr No</th>
+
+                            <th>Drug Name</th>
+
+                            <th>Brand Name</th>
+
+                            <th>Pharmacological Class</th>
+
+                            <th>Schedule</th>
+
+                            <th>Dosage Form</th>
+
+                            <th>Storage</th>
+
+                            <th>Category</th>
+
+                            <th>Stock</th>
+
+                            <th>Reorder Level</th>
+
+                            <th>Expiry Date</th>
+
+                            <th>Price</th>
+
+                            <th>Status</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for drug in drugs %}
+
+                        <tr>
+
+
+                            <!-- SR NO -->
+
+                            <td>
+                                {{ loop.index }}
+                            </td>
+
+
+                            <!-- DRUG NAME -->
+
+                            <td>
+                                <strong>
+                                    {{ drug.get('drug_name', '') }}
+                                </strong>
+                            </td>
+
+
+                            <!-- BRAND -->
+
+                            <td>
+                                {{ drug.get('brand_name', '') }}
+                            </td>
+
+
+                            <!-- PHARMACOLOGICAL CLASS -->
+
+                            <td>
+                                {{ drug.get('pharmacological_class', '') }}
+                            </td>
+
+
+                            <!-- SCHEDULE -->
+
+                            <td>
+                                {{ drug.get('schedule', '') }}
+                            </td>
+
+
+                            <!-- DOSAGE FORM -->
+
+                            <td>
+                                {{ drug.get('dosage_form', '') }}
+                            </td>
+
+
+                            <!-- STORAGE -->
+
+                            <td>
+                                {{ drug.get('storage', '') }}
+                            </td>
+
+
+                            <!-- CATEGORY -->
+
+                            <td>
+                                {{ drug.get('category', '') }}
+                            </td>
+
+
+                            <!-- STOCK -->
+
+                            <td>
+
+                                <strong>
+                                    {{ drug.get('stock', 0) }}
+                                </strong>
+
+                            </td>
+
+
+                            <!-- REORDER LEVEL -->
+
+                            <td>
+                                {{ drug.get('reorder_level', 0) }}
+                            </td>
+
+
+                            <!-- EXPIRY DATE -->
+
+                            <td>
+
+                                {{ drug.get('expiry_date', '') }}
+
+                            </td>
+
+
+                            <!-- PRICE -->
+
+                            <td>
+
+                                ₹{{ drug.get('price', 0) }}
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                {% set stock = drug.get('stock', 0) | int %}
+                                {% set reorder = drug.get('reorder_level', 10) | int %}
+
+                                {% if stock == 0 %}
+
+                                    <span class="badge bg-danger">
+
+                                        <i class="bi bi-x-circle"></i>
+
+                                        Out of Stock
+
+                                    </span>
+
+                                {% elif stock <= reorder %}
+
+                                    <span class="badge bg-warning text-dark">
+
+                                        <i class="bi bi-exclamation-triangle"></i>
+
+                                        Low Stock
+
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-success">
+
+                                        <i class="bi bi-check-circle"></i>
+
+                                        Available
+
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- ACTION -->
+
+                            <td>
+
+                                <a
+                                    href="/edit-drug/{{ drug.get('id') }}"
+                                    class="btn btn-warning btn-sm me-1"
+                                    title="Edit Drug">
+
+                                    <i class="bi bi-pencil-square"></i>
+
+                                </a>
+
+
+                                <a
+                                    href="/delete-drug/{{ drug.get('id') }}"
+                                    class="btn btn-danger btn-sm"
+                                    title="Delete Drug"
+                                    onclick="return confirm('Are you sure you want to delete this drug?')">
+
+                                    <i class="bi bi-trash"></i>
+
+                                </a>
+
+                            </td>
+
+
+                        </tr>
+
+                    {% else %}
+
+
+                        <!-- NO DRUG -->
+
+                        <tr>
+
+                            <td
+                                colspan="14"
+                                class="text-center py-5">
+
+                                <i class="bi bi-inbox fs-1 text-muted"></i>
+
+                                <h5 class="mt-3">
+                                    No Drugs Found
+                                </h5>
+
+                                <p class="text-muted">
+                                    Add your first medicine to the inventory.
+                                </p>
+
+                                <a
+                                    href="/add-drug"
+                                    class="btn btn-primary">
+
+                                    <i class="bi bi-plus-circle"></i>
+
+                                    Add New Drug
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="text-center mt-5 text-muted">
+
+        <hr>
+
+        <p class="mb-0">
+
+            © 2026
+            <strong>PIMS Premium</strong>
+            |
+            Pharmacy Inventory Management System
+
+        </p>
+
+    </footer>
+
 </div>
 
-<!-- Drug Inventory -->
 
-<div class="card shadow border-0 rounded-4">
-
-<div class="card-header bg-primary text-white">
-
-<h5 class="mb-0">
-
-<i class="bi bi-capsule"></i>
-
-Drug Inventory
-
-</h5>
-
-</div>
-
-<div class="card-body">
-
-<div class="table-responsive">
-
-<table class="table table-hover align-middle" id="drugTable">
-
-    <thead class="table-dark">
-
-<tr>
-
-    <th>Sr No</th>
-    <th>Drug Name</th>
-    <th>Brand</th>
-    <th>Category</th>
-    <th>Stock</th>
-    <th>Expiry Date</th>
-    <th>Price</th>
-    <th>Status</th>
-    <th>Action</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-{% for drug in drugs %}
-
-<tr>
-
-    <td>{{ loop.index }}</td>
-
-    <td>{{ drug[1] }}</td>
-
-    <td>{{ drug[2] }}</td>
-
-    <td>{{ drug[3] }}</td>
-
-    <td>{{ drug[4] }}</td>
-
-    <td>{{ drug[5] }}</td>
-
-    <td>₹{{ drug[6] }}</td>
-
-    <td>
-
-        {% if drug[4] > 10 %}
-
-        <span class="badge bg-success">
-            Available
-        </span>
-
-        {% else %}
-
-        <span class="badge bg-danger">
-            Low Stock
-        </span>
-
-        {% endif %}
-
-    </td>
-
-    <td>
-        <a href="/edit-drug/{{ drug[0] }}"
-   class="btn btn-warning btn-sm me-1"
-   title="Edit Drug">
-
-    <i class="bi bi-pencil-square"></i>
-
-</a>
-
-<a href="/delete-drug/{{ drug[0] }}"
-   class="btn btn-danger btn-sm"
-   title="Delete Drug"
-   onclick="return confirm('Are you sure you want to delete this drug?')">
-
-    <i class="bi bi-trash"></i>
-
-</a>
-
-</td>
-
-</tr>
-
-{% endfor %}
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-</div>
+<!-- ================= SEARCH JAVASCRIPT ================= -->
 
 <script>
 
-function searchDrug() {
+function searchDrug(){
 
-    let input = document.getElementById("searchInput").value.toUpperCase();
+    let input =
+        document
+        .getElementById("searchInput")
+        .value
+        .toUpperCase();
 
-    let table = document.getElementById("drugTable");
+    let table =
+        document.getElementById("drugTable");
 
-    let tr = table.getElementsByTagName("tr");
+    let tr =
+        table.getElementsByTagName("tr");
 
-    for (let i = 1; i < tr.length; i++) {
 
-        let td = tr[i].getElementsByTagName("td")[1];
+    for(let i = 1; i < tr.length; i++){
 
-        if (td) {
+        let td =
+            tr[i].getElementsByTagName("td")[1];
 
-            let txtValue = td.textContent || td.innerText;
+        if(td){
 
-            if (txtValue.toUpperCase().indexOf(input) > -1) {
+            let txtValue =
+                td.textContent ||
+                td.innerText;
+
+            if(
+                txtValue
+                .toUpperCase()
+                .indexOf(input) > -1
+            ){
 
                 tr[i].style.display = "";
 
-            } else {
+            }
+            else{
 
                 tr[i].style.display = "none";
 
@@ -324,23 +586,9 @@ function searchDrug() {
 
 </script>
 
-<!-- Footer -->
-
-<footer class="text-center mt-5 text-muted">
-
-    <hr>
-
-    <p class="mb-0">
-        © 2026 <strong>PIMS Premium</strong> |
-        Pharmacy Inventory Management System
-    </p>
-
-</footer>
-
-</div>
-<!-- End Main -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

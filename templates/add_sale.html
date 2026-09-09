@@ -1,94 +1,438 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Add Sale</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script>
-async function getPrice() {
+    <title>Add Sale - PIMS Premium</title>
 
-    let drug = document.getElementById("drug_name").value;
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 
-    if(drug=="") return;
+    <style>
 
-    let response = await fetch("/get-price/" + drug);
-    let data = await response.json();
+        body {
+            background: #f4f6f9;
+        }
 
-    document.getElementById("price").value = data.price;
-    document.getElementById("stock").value = data.stock;
+        .sale-card {
+            max-width: 900px;
+            margin: 40px auto;
+        }
 
-    calculateTotal();
-}
+        .card-header {
+            background: #198754;
+            color: white;
+        }
 
-function calculateTotal(){
+        .total-box {
+            font-size: 22px;
+            font-weight: bold;
+        }
 
-    let price = parseFloat(document.getElementById("price").value) || 0;
-    let qty = parseInt(document.getElementById("quantity").value) || 0;
-
-    document.getElementById("total_amount").value = price * qty;
-}
-</script>
+    </style>
 
 </head>
 
 
-<body class="bg-light">
+<body>
 
-<div class="container mt-5">
 
-<div class="card shadow">
+<div class="container">
 
-<div class="card-header bg-success text-white">
-<h3>Add New Sale</h3>
+    <div class="card shadow sale-card">
+
+        <!-- Header -->
+
+        <div class="card-header">
+
+            <h3 class="mb-0">
+                🛒 Create New Sale
+            </h3>
+
+            <small>
+                Create pharmacy sales transaction
+            </small>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            <!-- FORM -->
+
+            <form
+                method="POST"
+                action="{{ url_for('save_sale') }}"
+            >
+
+
+                <!-- Customer Name -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Customer Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="customer_name"
+                        class="form-control"
+                        placeholder="Enter customer name"
+                        required
+                    >
+
+                </div>
+
+
+
+                <div class="row">
+
+
+                    <!-- Drug -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Drug Name
+                        </label>
+
+
+                        <select
+                            name="drug_id"
+                            id="drug_id"
+                            class="form-select"
+                            required
+                            onchange="drugSelected()"
+                        >
+
+                            {% for drug in drugs %}
+
+                            <option
+                                value="{{ drug.id }}"
+                                data-price="{{ drug.price }}"
+                                data-stock="{{ drug.stock }}"
+                            >
+
+                                {{ drug.drug_name }}
+                                — Stock: {{ drug.stock }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- Stock -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Available Stock
+                        </label>
+
+                        <input
+                            type="text"
+                            id="stock"
+                            class="form-control"
+                            readonly
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="row">
+
+
+                    <!-- Quantity -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Quantity
+                        </label>
+
+                        <input
+                            type="number"
+                            name="quantity"
+                            id="quantity"
+                            class="form-control"
+                            min="1"
+                            value="1"
+                            required
+                            oninput="calculateTotal()"
+                        >
+
+                    </div>
+
+
+
+                    <!-- Price -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Price (₹)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="price"
+                            class="form-control"
+                            step="0.01"
+                            readonly
+                        >
+
+                    </div>
+
+
+
+                    <!-- Total -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Total Amount (₹)
+                        </label>
+
+                        <input
+                            type="text"
+                            id="total_amount"
+                            class="form-control total-box"
+                            value="0.00"
+                            readonly
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Payment Method -->
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Payment Method
+                    </label>
+
+                    <select
+                        name="payment_method"
+                        class="form-select"
+                    >
+
+                        <option value="Cash">
+                            Cash
+                        </option>
+
+                        <option value="UPI">
+                            UPI
+                        </option>
+
+                        <option value="Card">
+                            Card
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- Buttons -->
+
+                <div class="mt-4">
+
+                    <button
+                        type="submit"
+                        class="btn btn-success"
+                    >
+
+                        💾 Save Sale
+
+                    </button>
+
+
+                    <button
+                        type="reset"
+                        class="btn btn-secondary"
+                        onclick="resetSale()"
+                    >
+
+                        🔄 Reset
+
+                    </button>
+
+
+                    <a
+                        href="{{ url_for('sales') }}"
+                        class="btn btn-outline-dark"
+                    >
+
+                        ← Back
+
+                    </a>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div class="card-body">
 
-<form method="POST">
 
-<div class="mb-3">
-<label>Customer Name</label>
-<input type="text" name="customer_name" class="form-control" required>
-</div>
+<script>
 
-<div class="mb-3">
-<label>Drug Name</label>
 
-<select name="drug_name" class="form-select" required>
-<option value="">Select Drug</option>
+// =====================================================
+// DRUG SELECT
+// =====================================================
 
-{% for drug in drugs %}
-<option value="{{ drug[0] }}">
-{{ drug[0] }}
-</option>
-{% endfor %}
+function drugSelected() {
 
-</select>
-</div>
+    const select =
+        document.getElementById("drug_id");
 
-<div class="mb-3">
-<label>Quantity</label>
-<input type="number" name="quantity" class="form-control" required>
-</div>
+    const option =
+        select.options[select.selectedIndex];
 
-<button type="submit" class="btn btn-success">
-Save Sale
-</button>
 
-<a href="/sales" class="btn btn-secondary">
-Back
-</a>
+    if (!option) {
+        return;
+    }
 
-</form>
 
-</div>
+    const price =
+        parseFloat(
+            option.getAttribute("data-price")
+        ) || 0;
 
-</div>
 
-</div>
+    const stock =
+        parseInt(
+            option.getAttribute("data-stock")
+        ) || 0;
+
+
+    document.getElementById("price").value =
+        price.toFixed(2);
+
+
+    document.getElementById("stock").value =
+        stock;
+
+
+    calculateTotal();
+
+}
+
+
+
+// =====================================================
+// CALCULATE TOTAL
+// =====================================================
+
+function calculateTotal() {
+
+    const price =
+        parseFloat(
+            document.getElementById("price").value
+        ) || 0;
+
+
+    const quantity =
+        parseInt(
+            document.getElementById("quantity").value
+        ) || 0;
+
+
+    const stock =
+        parseInt(
+            document.getElementById("stock").value
+        ) || 0;
+
+
+    if (quantity > stock) {
+
+        document.getElementById(
+            "total_amount"
+        ).value = "0.00";
+
+        return;
+    }
+
+
+    const total =
+        price * quantity;
+
+
+    document.getElementById(
+        "total_amount"
+    ).value =
+        total.toFixed(2);
+
+}
+
+
+
+// =====================================================
+// RESET
+// =====================================================
+
+function resetSale() {
+
+    setTimeout(function () {
+
+        document.getElementById(
+            "price"
+        ).value = "";
+
+        document.getElementById(
+            "stock"
+        ).value = "";
+
+        document.getElementById(
+            "total_amount"
+        ).value = "0.00";
+
+    }, 50);
+
+}
+
+
+
+// =====================================================
+// PAGE LOAD
+// =====================================================
+
+window.onload = function () {
+
+    drugSelected();
+
+};
+
+</script>
+
 
 </body>
+
 </html>

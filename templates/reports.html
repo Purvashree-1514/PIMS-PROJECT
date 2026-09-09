@@ -1,493 +1,1628 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PIMS Premium - Reports</title>
+    <title>PIMS Premium - Reports</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 
-<style>
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+        rel="stylesheet"
+    >
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
-}
+    <style>
 
-body{
-background:#eef2ff;
-overflow-x:hidden;
-}
+        * {
+            box-sizing: border-box;
+        }
 
-.sidebar{
-position:fixed;
-left:0;
-top:0;
-width:260px;
-height:100vh;
-background:linear-gradient(180deg,#4f46e5,#7c3aed);
-padding:25px;
-color:white;
-}
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f5fb;
+            color: #333;
+        }
 
-.logo{
-font-size:28px;
-font-weight:bold;
-text-align:center;
-margin-bottom:35px;
-}
+        /* ================= SIDEBAR ================= */
 
-.sidebar a{
-display:block;
-padding:14px 18px;
-margin-bottom:10px;
-text-decoration:none;
-color:white;
-border-radius:12px;
-transition:.3s;
-}
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 245px;
+            height: 100vh;
+            background: linear-gradient(180deg, #20203d, #17172e);
+            color: white;
+            padding: 25px 15px;
+            z-index: 1000;
+            overflow-y: auto;
+        }
 
-.sidebar a:hover,
-.sidebar a.active{
-background:rgba(255,255,255,.18);
-}
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 5px 12px 30px;
+        }
 
-.main{
-margin-left:260px;
-padding:25px;
-}
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #7956e8, #a05bea);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+        }
 
-.header{
-background:white;
-padding:20px;
-border-radius:18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
-margin-bottom:25px;
-}
+        .brand h4 {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 700;
+        }
 
-.card-box{
-background:white;
-padding:25px;
-border-radius:18px;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
-transition:.3s;
-height:100%;
-}
+        .nav-link-custom {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            color: #d7d7e8;
+            text-decoration: none;
+            padding: 13px 14px;
+            margin: 5px 0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
 
-.card-box:hover{
-transform:translateY(-5px);
-}
+        .nav-link-custom i {
+            font-size: 17px;
+            width: 22px;
+        }
 
-.icon{
-width:60px;
-height:60px;
-border-radius:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:26px;
-color:white;
-margin-bottom:15px;
-}
+        .nav-link-custom:hover {
+            background: rgba(126, 88, 232, 0.18);
+            color: white;
+        }
 
-.bg1{background:#3b82f6;}
-.bg2{background:#22c55e;}
-.bg3{background:#f59e0b;}
-.bg4{background:#ef4444;}
+        .nav-link-custom.active {
+            background: linear-gradient(90deg, #7553df, #8c5be9);
+            color: white;
+            box-shadow: 0 5px 15px rgba(93, 61, 190, 0.3);
+        }
 
-</style>
+        /* ================= MAIN ================= */
+
+        .main-content {
+            margin-left: 245px;
+            padding: 25px;
+            min-height: 100vh;
+        }
+
+        /* ================= TOPBAR ================= */
+
+        .topbar {
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+
+        .top-icon {
+            font-size: 20px;
+            color: #555;
+            position: relative;
+        }
+
+        .notification {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4d5a;
+            color: white;
+            font-size: 9px;
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7c57e7, #a95bea);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ================= HEADER ================= */
+
+        .report-header {
+            background: linear-gradient(100deg, #6252df, #7952e3, #a44fe3);
+            border-radius: 20px;
+            padding: 25px 30px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(103, 79, 210, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .report-header h2 {
+            margin: 0;
+            font-size: 27px;
+            font-weight: 700;
+        }
+
+        .breadcrumb-custom {
+            margin-top: 8px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* ================= FILTER ================= */
+
+        .filter-card {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 18px;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #555;
+        }
+
+        .form-control {
+            height: 44px;
+            border-radius: 9px;
+            border: 1px solid #ddd;
+        }
+
+        .btn-filter,
+        .btn-print {
+            height: 44px;
+            border: none;
+            border-radius: 9px;
+            color: white;
+            font-weight: 600;
+            width: 100%;
+        }
+
+        .btn-filter {
+            background: #287be0;
+        }
+
+        .btn-filter:hover {
+            background: #1769c7;
+        }
+
+        .btn-print {
+            background: #f0444e;
+        }
+
+        .btn-print:hover {
+            background: #d92e39;
+        }
+
+        /* ================= TABS ================= */
+
+        .report-tabs {
+            background: white;
+            border-radius: 15px;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+            margin-bottom: 18px;
+        }
+
+        .report-tab {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 13px;
+            border-radius: 10px;
+            font-weight: 600;
+            color: #777;
+            cursor: pointer;
+        }
+
+        .report-tab:hover {
+            background: #f3f0ff;
+            color: #684bd6;
+        }
+
+        .report-tab.active {
+            background: linear-gradient(90deg, #6351db, #8553df);
+            color: white;
+        }
+
+        /* ================= SUMMARY CARDS ================= */
+
+        .summary-card {
+            background: white;
+            border-radius: 17px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 18px;
+            height: 100%;
+        }
+
+        .summary-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            margin-bottom: 12px;
+        }
+
+        .purple {
+            background: #eee9ff;
+            color: #7052dc;
+        }
+
+        .blue {
+            background: #e7f1ff;
+            color: #287be0;
+        }
+
+        .green {
+            background: #e7f8ed;
+            color: #279653;
+        }
+
+        .orange {
+            background: #fff3d8;
+            color: #d58a00;
+        }
+
+        .summary-title {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .summary-value {
+            font-size: 25px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-card {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+
+        .search-box {
+            width: 240px;
+        }
+
+        .search-box input {
+            height: 40px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            width: 100%;
+        }
+
+        .table-responsive {
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        .report-table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: collapse;
+        }
+
+        .report-table thead th {
+            background: #fafafa;
+            color: #555;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 15px 12px;
+            border-bottom: 1px solid #eee;
+            white-space: nowrap;
+        }
+
+        .report-table tbody td {
+            padding: 15px 12px;
+            font-size: 14px;
+            color: #555;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+
+        .report-table tbody tr:hover {
+            background: #faf9ff;
+        }
+
+        .drug-name {
+            color: #684bd6;
+            font-weight: 700;
+        }
+
+        .transaction {
+            color: #dc5269;
+            font-weight: 600;
+        }
+
+        .amount {
+            font-weight: 700;
+            color: #333;
+        }
+
+        /* ================= STATUS ================= */
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-success {
+            background: #e7f8ed;
+            color: #279653;
+        }
+
+        .status-warning {
+            background: #fff3d8;
+            color: #d58a00;
+        }
+
+        .status-danger {
+            background: #ffe6e8;
+            color: #dc3948;
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty-row {
+            text-align: center;
+            padding: 40px !important;
+            color: #999 !important;
+        }
+
+        .empty-row i {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* ================= FOOTER ================= */
+
+        .footer {
+            text-align: center;
+            padding: 25px 10px 10px;
+            color: #999;
+            font-size: 13px;
+        }
+
+        /* ================= SECTIONS ================= */
+
+        .report-section {
+            display: none;
+        }
+
+        .report-section.active {
+            display: block;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 992px) {
+
+            .sidebar {
+                width: 210px;
+            }
+
+            .main-content {
+                margin-left: 210px;
+                padding: 18px;
+            }
+
+            .report-header h2 {
+                font-size: 23px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .report-tabs {
+                flex-direction: column;
+            }
+
+            .table-top {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+
+        /* ================= PRINT ================= */
+
+        @media print {
+
+            .sidebar,
+            .topbar,
+            .filter-card,
+            .report-tabs,
+            .search-box,
+            .footer {
+                display: none !important;
+            }
+
+            .main-content {
+                margin: 0;
+                padding: 0;
+            }
+
+            .report-header {
+                box-shadow: none;
+            }
+
+            .table-card,
+            .summary-card {
+                box-shadow: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .report-section {
+                display: block !important;
+            }
+        }
+
+    </style>
 
 </head>
 
 <body>
 
-<!-- Sidebar -->
+<!-- ================= SIDEBAR ================= -->
 
 <div class="sidebar">
 
-<div class="logo">
-<i class="bi bi-hospital"></i><br>
-PIMS Premium
-</div>
+    <div class="brand">
 
-<a href="/dashboard">
-<i class="bi bi-speedometer2"></i>
-Dashboard
-</a>
+        <div class="brand-icon">
+            <i class="bi bi-capsule"></i>
+        </div>
 
-<a href="/drugs">
-<i class="bi bi-capsule"></i>
-Drug Management
-</a>
+        <h4>PIMS Premium</h4>
 
-<a href="/sales">
-<i class="bi bi-cart-check"></i>
-Sales
-</a>
+    </div>
 
-<a href="/reports" class="active">
-<i class="bi bi-bar-chart"></i>
-Reports
-</a>
+    <a href="{{ url_for('dashboard') }}" class="nav-link-custom">
+        <i class="bi bi-grid-1x2-fill"></i>
+        Dashboard
+    </a>
 
-<a href="/settings">
-<i class="bi bi-gear"></i>
-Settings
-</a>
+    <a href="{{ url_for('drugs') }}" class="nav-link-custom">
+        <i class="bi bi-capsule-pill"></i>
+        Drug Management
+    </a>
 
-<a href="/">
-<i class="bi bi-box-arrow-right"></i>
-Logout
-</a>
+    <a href="{{ url_for('sales') }}" class="nav-link-custom">
+        <i class="bi bi-cart3"></i>
+        Sales
+    </a>
 
-</div>
+    <a href="{{ url_for('reports') }}" class="nav-link-custom active">
+        <i class="bi bi-file-earmark-bar-graph"></i>
+        Reports
+    </a>
 
-<!-- Main -->
+    <a href="{{ url_for('settings') }}" class="nav-link-custom">
+        <i class="bi bi-gear-fill"></i>
+        Settings
+    </a>
 
-<div class="main">
-
-<div class="header">
-
-<div>
-
-<h3>📊 Reports Dashboard</h3>
-
-<small>Sales, Stock and Expiry Reports</small>
+    <a href="{{ url_for('logout') }}" class="nav-link-custom">
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+    </a>
 
 </div>
 
-<div>
 
-<a href="/reports/pdf" class="btn btn-danger me-2">
+<!-- ================= MAIN ================= -->
 
-<i class="bi bi-file-earmark-pdf"></i>
+<div class="main-content">
 
-PDF
+    <!-- TOP BAR -->
 
-</a>
+    <div class="topbar">
 
-<a href="/reports/excel" class="btn btn-success">
+        <div class="top-icon">
+            <i class="bi bi-house-fill"></i>
+        </div>
 
-<i class="bi bi-file-earmark-excel"></i>
+        <div class="notification top-icon">
 
-Excel
+            <i class="bi bi-bell-fill"></i>
 
-</a>
+            <span class="notification-badge">
+                1
+            </span>
+
+        </div>
+
+        <div class="profile">
+
+            <div class="profile-circle">
+                <i class="bi bi-person-fill"></i>
+            </div>
+
+            <span>Admin</span>
+
+        </div>
+
+    </div>
+
+
+    <!-- HEADER -->
+
+    <div class="report-header">
+
+        <h2>
+            <i class="bi bi-file-earmark-text-fill"></i>
+            Pharmacy Management Report
+        </h2>
+
+        <div class="breadcrumb-custom">
+
+            <i class="bi bi-house"></i>
+            &nbsp; Home
+            <span class="mx-2">›</span>
+            Reports
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= SUMMARY ================= -->
+
+    <div class="row g-3 mb-3">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="summary-card">
+
+                <div class="summary-icon purple">
+                    <i class="bi bi-capsule-pill"></i>
+                </div>
+
+                <div class="summary-title">
+                    Total Drugs
+                </div>
+
+                <div class="summary-value">
+                    {{ total_drugs }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="summary-card">
+
+                <div class="summary-icon blue">
+                    <i class="bi bi-cart-check-fill"></i>
+                </div>
+
+                <div class="summary-title">
+                    Total Sales
+                </div>
+
+                <div class="summary-value">
+                    {{ total_sales }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="summary-card">
+
+                <div class="summary-icon green">
+                    <i class="bi bi-currency-rupee"></i>
+                </div>
+
+                <div class="summary-title">
+                    Total Revenue
+                </div>
+
+                <div class="summary-value">
+                    ₹{{ "%.2f"|format(total_revenue|float) }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="summary-card">
+
+                <div class="summary-icon orange">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+
+                <div class="summary-title">
+                    Low Stock
+                </div>
+
+                <div class="summary-value">
+                    {{ low_stock_count }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FILTER ================= -->
+
+    <div class="filter-card">
+
+        <form
+            method="GET"
+            action="{{ url_for('reports') }}"
+        >
+
+            <div class="row align-items-end">
+
+                <div class="col-md-4">
+
+                    <div class="filter-label">
+                        From Date
+                    </div>
+
+                    <input
+                        type="date"
+                        name="from_date"
+                        class="form-control"
+                        value="{{ request.args.get('from_date', '') }}"
+                    >
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="filter-label">
+                        To Date
+                    </div>
+
+                    <input
+                        type="date"
+                        name="to_date"
+                        class="form-control"
+                        value="{{ request.args.get('to_date', '') }}"
+                    >
+
+                </div>
+
+
+                <div class="col-md-2">
+
+                    <button
+                        type="submit"
+                        class="btn-filter"
+                    >
+
+                        <i class="bi bi-funnel-fill"></i>
+                        Filter
+
+                    </button>
+
+                </div>
+
+
+                <div class="col-md-2">
+
+                    <a
+                        href="{{ url_for('report_pdf') }}"
+                        class="btn btn-print d-flex align-items-center justify-content-center"
+                    >
+
+                        <i class="bi bi-file-earmark-pdf-fill me-2"></i>
+                        PDF Report
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- ================= TABS ================= -->
+
+    <div class="report-tabs">
+
+        <button
+            type="button"
+            class="report-tab active"
+            onclick="showReport('salesReport', this)"
+        >
+
+            <i class="bi bi-cart-check-fill"></i>
+            Sales
+
+        </button>
+
+
+        <button
+            type="button"
+            class="report-tab"
+            onclick="showReport('stockReport', this)"
+        >
+
+            <i class="bi bi-box-seam-fill"></i>
+            Stock
+
+        </button>
+
+
+        <button
+            type="button"
+            class="report-tab"
+            onclick="showReport('expiryReport', this)"
+        >
+
+            <i class="bi bi-calendar-x-fill"></i>
+            Expiry
+
+        </button>
+
+
+        <button
+            type="button"
+            class="report-tab"
+            onclick="showReport('financeReport', this)"
+        >
+
+            <i class="bi bi-cash-stack"></i>
+            Finance
+
+        </button>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- SALES REPORT -->
+    <!-- ================================================= -->
+
+    <div
+        id="salesReport"
+        class="report-section active"
+    >
+
+        <div class="table-card">
+
+            <div class="table-top">
+
+                <h3 class="table-title">
+
+                    <i class="bi bi-cart-check-fill"></i>
+                    Sales Report
+
+                </h3>
+
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        id="salesSearch"
+                        placeholder="Search sales..."
+                        onkeyup="searchTable('salesSearch', 'salesTable')"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table
+                    class="report-table"
+                    id="salesTable"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th>NO</th>
+                            <th>TRANSACTION</th>
+                            <th>CUSTOMER</th>
+                            <th>DRUG</th>
+                            <th>QTY</th>
+                            <th>PRICE</th>
+                            <th>SUBTOTAL</th>
+                            <th>PAYMENT</th>
+                            <th>DATE</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% if sales %}
+
+                        {% for sale in sales %}
+
+                        <tr>
+
+                            <td>
+                                {{ loop.index }}
+                            </td>
+
+                            <td class="transaction">
+                                {{ sale.invoice_no or 'N/A' }}
+                            </td>
+
+                            <td>
+                                {{ sale.customer_name or 'Walk-in Customer' }}
+                            </td>
+
+                            <td class="drug-name">
+                                {{ sale.drug_name or 'N/A' }}
+                            </td>
+
+                            <td>
+                                {{ sale.quantity or 0 }}
+                            </td>
+
+                            <td>
+                                ₹{{ "%.2f"|format(sale.price|float) }}
+                            </td>
+
+                            <td class="amount">
+                                ₹{{ "%.2f"|format(sale.total_amount|float) }}
+                            </td>
+
+                            <td>
+                                {{ sale.payment_method or 'Cash' }}
+                            </td>
+
+                            <td>
+                                {{ sale.sale_date or '-' }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <tr>
+
+                            <td
+                                colspan="9"
+                                class="empty-row"
+                            >
+
+                                <i class="bi bi-inbox"></i>
+
+                                No sales records found
+
+                            </td>
+
+                        </tr>
+
+                    {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- STOCK REPORT -->
+    <!-- ================================================= -->
+
+    <div
+        id="stockReport"
+        class="report-section"
+    >
+
+        <div class="table-card">
+
+            <div class="table-top">
+
+                <h3 class="table-title">
+
+                    <i class="bi bi-box-seam-fill"></i>
+                    Stock Report
+
+                </h3>
+
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        id="stockSearch"
+                        placeholder="Search stock..."
+                        onkeyup="searchTable('stockSearch', 'stockTable')"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table
+                    class="report-table"
+                    id="stockTable"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th>NO</th>
+                            <th>DRUG NAME</th>
+                            <th>BRAND</th>
+                            <th>CATEGORY</th>
+                            <th>STOCK</th>
+                            <th>REORDER LEVEL</th>
+                            <th>PRICE</th>
+                            <th>STATUS</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% if drugs %}
+
+                        {% for drug in drugs %}
+
+                        <tr>
+
+                            <td>
+                                {{ loop.index }}
+                            </td>
+
+                            <td class="drug-name">
+                                {{ drug.drug_name }}
+                            </td>
+
+                            <td>
+                                {{ drug.brand_name or '-' }}
+                            </td>
+
+                            <td>
+                                {{ drug.category or '-' }}
+                            </td>
+
+                            <td>
+                                {{ drug.stock or 0 }}
+                            </td>
+
+                            <td>
+                                {{ drug.reorder_level or 0 }}
+                            </td>
+
+                            <td class="amount">
+                                ₹{{ "%.2f"|format(drug.price|float) }}
+                            </td>
+
+                            <td>
+
+                                {% if drug.stock|int <= 0 %}
+
+                                    <span class="status status-danger">
+                                        Out of Stock
+                                    </span>
+
+                                {% elif drug.stock|int <= drug.reorder_level|int %}
+
+                                    <span class="status status-warning">
+                                        Low Stock
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status status-success">
+                                        Available
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <tr>
+
+                            <td
+                                colspan="8"
+                                class="empty-row"
+                            >
+
+                                <i class="bi bi-box"></i>
+
+                                No stock records found
+
+                            </td>
+
+                        </tr>
+
+                    {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- EXPIRY REPORT -->
+    <!-- ================================================= -->
+
+    <div
+        id="expiryReport"
+        class="report-section"
+    >
+
+        <div class="table-card">
+
+            <div class="table-top">
+
+                <h3 class="table-title">
+
+                    <i class="bi bi-calendar-x-fill"></i>
+                    Expiry Report
+
+                </h3>
+
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        id="expirySearch"
+                        placeholder="Search expiry..."
+                        onkeyup="searchTable('expirySearch', 'expiryTable')"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table
+                    class="report-table"
+                    id="expiryTable"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th>NO</th>
+                            <th>DRUG NAME</th>
+                            <th>STOCK</th>
+                            <th>EXPIRY DATE</th>
+                            <th>STATUS</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% if expiry_drugs %}
+
+                        {% for drug in expiry_drugs %}
+
+                        <tr>
+
+                            <td>
+                                {{ loop.index }}
+                            </td>
+
+                            <td class="drug-name">
+                                {{ drug.drug_name }}
+                            </td>
+
+                            <td>
+                                {{ drug.stock or 0 }}
+                            </td>
+
+                            <td>
+                                {{ drug.expiry_date or '-' }}
+                            </td>
+
+                            <td>
+
+                                {% if drug.expiry_date %}
+
+                                    {% set today = namespace(value=none) %}
+
+                                    {% if drug.expiry_date|string < now|string %}
+
+                                        <span class="status status-danger">
+                                            Expired
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="status status-warning">
+                                            Expiring Soon
+                                        </span>
+
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <span class="status status-success">
+                                        No Date
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="empty-row"
+                            >
+
+                                <i class="bi bi-calendar-check"></i>
+
+                                No expiry alerts found
+
+                            </td>
+
+                        </tr>
+
+                    {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- FINANCE REPORT -->
+    <!-- ================================================= -->
+
+    <div
+        id="financeReport"
+        class="report-section"
+    >
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+
+                <div class="summary-card">
+
+                    <div class="summary-icon green">
+                        <i class="bi bi-currency-rupee"></i>
+                    </div>
+
+                    <div class="summary-title">
+                        Total Revenue
+                    </div>
+
+                    <div class="summary-value">
+                        ₹{{ "%.2f"|format(total_revenue|float) }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="summary-card">
+
+                    <div class="summary-icon blue">
+                        <i class="bi bi-receipt"></i>
+                    </div>
+
+                    <div class="summary-title">
+                        Total Transactions
+                    </div>
+
+                    <div class="summary-value">
+                        {{ total_sales }}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <div class="summary-card">
+
+                    <div class="summary-icon purple">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+
+                    <div class="summary-title">
+                        Total Quantity Sold
+                    </div>
+
+                    <div class="summary-value">
+                        {{ total_quantity }}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-card mt-3">
+
+            <div class="table-top">
+
+                <h3 class="table-title">
+
+                    <i class="bi bi-cash-stack"></i>
+                    Finance Details
+
+                </h3>
+
+
+                <div class="search-box">
+
+                    <input
+                        type="text"
+                        id="financeSearch"
+                        placeholder="Search finance..."
+                        onkeyup="searchTable('financeSearch', 'financeTable')"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table
+                    class="report-table"
+                    id="financeTable"
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th>NO</th>
+                            <th>INVOICE</th>
+                            <th>CUSTOMER</th>
+                            <th>DRUG</th>
+                            <th>QTY</th>
+                            <th>PRICE</th>
+                            <th>TOTAL</th>
+                            <th>PAYMENT</th>
+                            <th>DATE</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% if sales %}
+
+                        {% for sale in sales %}
+
+                        <tr>
+
+                            <td>
+                                {{ loop.index }}
+                            </td>
+
+                            <td class="transaction">
+                                {{ sale.invoice_no or '-' }}
+                            </td>
+
+                            <td>
+                                {{ sale.customer_name or '-' }}
+                            </td>
+
+                            <td class="drug-name">
+                                {{ sale.drug_name or '-' }}
+                            </td>
+
+                            <td>
+                                {{ sale.quantity or 0 }}
+                            </td>
+
+                            <td>
+                                ₹{{ "%.2f"|format(sale.price|float) }}
+                            </td>
+
+                            <td class="amount">
+                                ₹{{ "%.2f"|format(sale.total_amount|float) }}
+                            </td>
+
+                            <td>
+                                {{ sale.payment_method or 'Cash' }}
+                            </td>
+
+                            <td>
+                                {{ sale.sale_date or '-' }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <tr>
+
+                            <td
+                                colspan="9"
+                                class="empty-row"
+                            >
+
+                                <i class="bi bi-cash-stack"></i>
+
+                                No financial records found
+
+                            </td>
+
+                        </tr>
+
+                    {% endif %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <div class="footer">
+
+        PIMS Premium &copy; 2026
+        | Pharmacy Inventory Management System
+
+    </div>
 
 </div>
 
-</div>
 
-<!-- Dashboard Cards -->
-
-<div class="row g-4">
-
-<div class="col-lg-3">
-
-<div class="card-box">
-
-<div class="icon bg1">
-
-<i class="bi bi-capsule"></i>
-
-</div>
-
-<h2>{{ total_drugs }}</h2>
-
-<p>Total Drugs</p>
-
-</div>
-
-</div>
-
-<div class="col-lg-3">
-
-<div class="card-box">
-
-<div class="icon bg2">
-
-<i class="bi bi-cart-check"></i>
-
-</div>
-
-<h2>{{ total_sales }}</h2>
-
-<p>Total Sales</p>
-
-</div>
-
-</div>
-
-<div class="col-lg-3">
-
-<div class="card-box">
-
-<div class="icon bg3">
-
-<i class="bi bi-currency-rupee"></i>
-
-</div>
-
-<h2>₹{{ total_revenue }}</h2>
-
-<p>Total Revenue</p>
-
-</div>
-
-</div>
-
-<div class="col-lg-3">
-
-<div class="card-box">
-
-<div class="icon bg4">
-
-<i class="bi bi-exclamation-triangle"></i>
-
-</div>
-
-<h2>{{ low_stock_count }}</h2>
-
-<p>Low Stock Items</p>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ========================= -->
-<!-- Search -->
-<!-- ========================= -->
-
-<div class="card-box mt-4">
-
-<div class="row">
-
-<div class="col-md-8">
-
-<input
-type="text"
-id="reportSearch"
-class="form-control"
-placeholder="🔍 Search Drug Name..."
-onkeyup="searchReport()">
-
-</div>
-
-<div class="col-md-4">
-
-<a href="/reports/excel"
-class="btn btn-success w-100">
-
-<i class="bi bi-file-earmark-excel"></i>
-
-Export Excel
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ========================= -->
-<!-- Low Stock Report -->
-<!-- ========================= -->
-
-<div class="card-box mt-4">
-
-<h4 class="mb-3">
-
-<i class="bi bi-exclamation-triangle-fill text-danger"></i>
-
-Low Stock Report
-
-</h4>
-
-<div class="table-responsive">
-
-<table
-class="table table-hover align-middle"
-id="reportTable">
-
-<thead class="table-dark">
-
-<tr>
-
-<th>#</th>
-<th>Drug Name</th>
-<th>Current Stock</th>
-<th>Reorder Level</th>
-<th>Status</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-{% for drug in low_stock_drugs %}
-
-<tr>
-
-<td>{{ loop.index }}</td>
-
-<td>{{ drug[1] }}</td>
-
-<td>{{ drug[2] }}</td>
-
-<td>{{ drug[3] }}</td>
-
-<td>
-
-<span class="badge bg-danger">
-
-Low Stock
-
-</span>
-
-</td>
-
-</tr>
-
-{% endfor %}
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-<!-- ========================= -->
-<!-- Expiry Report -->
-<!-- ========================= -->
-
-<div class="card-box mt-4">
-
-<h4 class="mb-3">
-
-<i class="bi bi-calendar-event text-warning"></i>
-
-Expiry Report
-
-</h4>
-
-<div class="table-responsive">
-
-<table class="table table-hover align-middle">
-
-<thead class="table-dark">
-
-<tr>
-
-<th>#</th>
-<th>Drug Name</th>
-<th>Stock</th>
-<th>Expiry Date</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-{% for drug in expiry_drugs %}
-
-<tr>
-
-<td>{{ loop.index }}</td>
-
-<td>{{ drug[1] }}</td>
-
-<td>{{ drug[2] }}</td>
-
-<td>{{ drug[3] }}</td>
-
-</tr>
-
-{% endfor %}
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-<!-- ========================= -->
-<!-- Search JavaScript -->
-<!-- ========================= -->
+<!-- ================= JAVASCRIPT ================= -->
 
 <script>
 
-function searchReport() {
+    function showReport(sectionId, button) {
 
-    let input = document.getElementById("reportSearch").value.toUpperCase();
+        const sections =
+            document.querySelectorAll(".report-section");
 
-    let table = document.getElementById("reportTable");
+        const buttons =
+            document.querySelectorAll(".report-tab");
 
-    let tr = table.getElementsByTagName("tr");
 
-    for (let i = 1; i < tr.length; i++) {
+        sections.forEach(function(section) {
 
-        let td = tr[i].getElementsByTagName("td")[1];
+            section.classList.remove("active");
 
-        if (td) {
+        });
 
-            let txtValue = td.textContent || td.innerText;
 
-            if (txtValue.toUpperCase().indexOf(input) > -1) {
+        buttons.forEach(function(btn) {
 
-                tr[i].style.display = "";
+            btn.classList.remove("active");
 
-            } else {
+        });
 
-                tr[i].style.display = "none";
 
-            }
+        const selectedSection =
+            document.getElementById(sectionId);
+
+
+        if (selectedSection) {
+
+            selectedSection.classList.add("active");
+
+        }
+
+
+        if (button) {
+
+            button.classList.add("active");
 
         }
 
     }
 
-}
+
+    function searchTable(inputId, tableId) {
+
+        const input =
+            document.getElementById(inputId);
+
+        const table =
+            document.getElementById(tableId);
+
+
+        if (!input || !table) {
+            return;
+        }
+
+
+        const filter =
+            input.value.toLowerCase();
+
+        const rows =
+            table.querySelectorAll("tbody tr");
+
+
+        rows.forEach(function(row) {
+
+            const text =
+                row.textContent.toLowerCase();
+
+
+            if (text.includes(filter)) {
+
+                row.style.display = "";
+
+            } else {
+
+                row.style.display = "none";
+
+            }
+
+        });
+
+    }
 
 </script>
 
-<!-- ========================= -->
-<!-- Footer -->
-<!-- ========================= -->
-
-<footer class="text-center mt-5 text-muted">
-
-<hr>
-
-<p class="mb-0">
-
-© 2026 <strong>PIMS Premium</strong> |
-Pharmacy Inventory Management System
-
-</p>
-
-</footer>
-
-</div>
-<!-- End Main -->
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

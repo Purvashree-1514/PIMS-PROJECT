@@ -6,448 +6,1871 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>PIMS Premium Dashboard</title>
+<title>PIMS Premium - Dashboard</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
 
 <style>
 
+/* =========================================================
+   GLOBAL
+========================================================= */
+
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
 }
 
 body{
-background:#eef2ff;
-overflow-x:hidden;
+    margin:0;
+    background:#f1f5ff;
+    font-family:'Segoe UI',Arial,sans-serif;
+    color:#1e293b;
 }
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
 
 .sidebar{
-position:fixed;
-left:0;
-top:0;
-width:260px;
-height:100vh;
-background:linear-gradient(180deg,#4f46e5,#7c3aed);
-padding:25px;
-color:white;
-box-shadow:0 10px 25px rgba(0,0,0,.2);
+    position:fixed;
+    left:0;
+    top:0;
+    width:260px;
+    height:100vh;
+    background:linear-gradient(
+        180deg,
+        #4338ca 0%,
+        #6d28d9 48%,
+        #2563eb 100%
+    );
+    color:white;
+    padding:22px 15px;
+    overflow-y:auto;
+    z-index:2000;
+    box-shadow:8px 0 30px rgba(30,41,59,.15);
+    transition:.3s;
 }
 
-.logo{
-font-size:28px;
-font-weight:bold;
-text-align:center;
-margin-bottom:35px;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:8px 10px 25px;
+    margin-bottom:18px;
+    border-bottom:1px solid rgba(255,255,255,.20);
+}
+
+.brand-icon{
+    width:50px;
+    height:50px;
+    border-radius:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    background:rgba(255,255,255,.18);
+}
+
+.brand h4{
+    margin:0;
+    font-size:19px;
+    font-weight:800;
+}
+
+.brand small{
+    color:#ddd6fe;
+    font-size:11px;
+}
+
+.menu-title{
+    color:#ddd6fe;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:1.2px;
+    padding:10px 12px;
 }
 
 .sidebar a{
-display:block;
-padding:14px 18px;
-margin-bottom:10px;
-color:white;
-text-decoration:none;
-border-radius:12px;
-transition:.3s;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    color:#f8fafc;
+    text-decoration:none;
+    padding:13px 15px;
+    border-radius:12px;
+    margin-bottom:7px;
+    font-size:14px;
+    transition:.25s;
 }
 
-.sidebar a:hover,
+.sidebar a i{
+    width:22px;
+    font-size:18px;
+}
+
+.sidebar a:hover{
+    background:rgba(255,255,255,.15);
+    color:white;
+    transform:translateX(4px);
+}
+
 .sidebar a.active{
-background:rgba(255,255,255,.18);
-transform:translateX(6px);
+    background:white;
+    color:#4f46e5;
+    font-weight:800;
 }
 
-.main{
-margin-left:260px;
-padding:25px;
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+.mobile-menu-btn{
+    display:none;
+    position:fixed;
+    top:15px;
+    left:15px;
+    width:45px;
+    height:45px;
+    border:0;
+    border-radius:12px;
+    background:#4f46e5;
+    color:white;
+    font-size:22px;
+    z-index:3000;
 }
 
-.header{
-background:white;
-padding:20px;
-border-radius:18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
-margin-bottom:25px;
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main-content{
+    margin-left:260px;
+    padding:25px;
+    min-height:100vh;
 }
 
-.card-box{
-background:white;
-padding:25px;
-border-radius:18px;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
-transition:.3s;
-height:100%;
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+
+.topbar{
+    background:white;
+    border-radius:22px;
+    padding:20px 24px;
+    margin-bottom:25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 8px 25px rgba(15,23,42,.08);
 }
 
-.card-box:hover{
-transform:translateY(-6px);
+.page-title{
+    margin:0;
+    font-size:30px;
+    font-weight:900;
+    background:linear-gradient(
+        90deg,
+        #4f46e5,
+        #7c3aed,
+        #06b6d4
+    );
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
 }
 
-.icon{
-width:60px;
-height:60px;
-border-radius:50%;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:26px;
-color:white;
-margin-bottom:15px;
+.page-subtitle{
+    margin:5px 0 0;
+    color:#64748b;
+    font-size:13px;
 }
 
-.bg1{background:#3b82f6;}
-.bg2{background:#22c55e;}
-.bg3{background:#f59e0b;}
-.bg4{background:#ef4444;}
-.bg5{background:#8b5cf6;}
+.admin-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.admin-icon{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(
+        135deg,
+        #ddd6fe,
+        #dbeafe
+    );
+    color:#4f46e5;
+    font-size:21px;
+}
+
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.stat-card{
+    position:relative;
+    overflow:hidden;
+    color:white;
+    border-radius:20px;
+    padding:21px;
+    min-height:145px;
+    border:0;
+    box-shadow:0 10px 25px rgba(15,23,42,.12);
+    transition:.3s;
+}
+
+.stat-card:hover{
+    transform:translateY(-7px);
+}
+
+.stat-card::before{
+    content:"";
+    position:absolute;
+    width:150px;
+    height:150px;
+    right:-50px;
+    bottom:-55px;
+    background:rgba(255,255,255,.14);
+    border-radius:50%;
+}
+
+.stat-card::after{
+    content:"";
+    position:absolute;
+    width:75px;
+    height:75px;
+    right:35px;
+    top:-35px;
+    background:rgba(255,255,255,.10);
+    border-radius:50%;
+}
+
+.card-blue{
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #06b6d4
+    );
+}
+
+.card-green{
+    background:linear-gradient(
+        135deg,
+        #059669,
+        #22c55e
+    );
+}
+
+.card-orange{
+    background:linear-gradient(
+        135deg,
+        #f97316,
+        #f59e0b
+    );
+}
+
+.card-red{
+    background:linear-gradient(
+        135deg,
+        #dc2626,
+        #ef4444
+    );
+}
+
+.card-purple{
+    background:linear-gradient(
+        135deg,
+        #7c3aed,
+        #a855f7
+    );
+}
+
+.card-pink{
+    background:linear-gradient(
+        135deg,
+        #db2777,
+        #ec4899
+    );
+}
+
+.card-dark{
+    background:linear-gradient(
+        135deg,
+        #334155,
+        #0f172a
+    );
+}
+
+.stat-top{
+    position:relative;
+    z-index:2;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.stat-label{
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:.4px;
+}
+
+.stat-number{
+    font-size:32px;
+    font-weight:900;
+    margin:3px 0 0;
+}
+
+.stat-icon{
+    width:55px;
+    height:55px;
+    border-radius:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    background:rgba(255,255,255,.18);
+}
+
+.stat-footer{
+    position:relative;
+    z-index:2;
+    margin-top:12px;
+    font-size:12px;
+}
+
+
+/* =========================================================
+   CONTENT CARD
+========================================================= */
+
+.content-card{
+    background:white;
+    border-radius:20px;
+    border:0;
+    box-shadow:0 8px 25px rgba(15,23,42,.07);
+    overflow:hidden;
+}
+
+.card-header-custom{
+    padding:18px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid #eef2f7;
+}
+
+.card-header-custom h5{
+    margin:0;
+    font-size:18px;
+    font-weight:800;
+}
+
+.card-body-custom{
+    padding:20px;
+}
+
+
+/* =========================================================
+   CHART
+========================================================= */
+
+.chart-container{
+    position:relative;
+    width:100%;
+    height:350px;
+}
+
+.sales-chart-container{
+    position:relative;
+    height:300px;
+}
+
+
+/* =========================================================
+   ALERTS
+========================================================= */
+
+.alert-box{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px;
+    margin-bottom:10px;
+    border-radius:14px;
+    text-decoration:none;
+    transition:.25s;
+}
+
+.alert-box:hover{
+    transform:translateX(4px);
+}
+
+.alert-icon{
+    min-width:43px;
+    width:43px;
+    height:43px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+}
+
+.alert-low{
+    background:#fff7ed;
+    color:#c2410c;
+}
+
+.alert-low .alert-icon{
+    background:#ffedd5;
+}
+
+.alert-expired{
+    background:#fef2f2;
+    color:#b91c1c;
+}
+
+.alert-expired .alert-icon{
+    background:#fee2e2;
+}
+
+.alert-near{
+    background:#f5f3ff;
+    color:#6d28d9;
+}
+
+.alert-near .alert-icon{
+    background:#ede9fe;
+}
+
+
+/* =========================================================
+   QUICK ACTION
+========================================================= */
+
+.quick-action{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px;
+    margin-bottom:10px;
+    border-radius:14px;
+    background:#f8fafc;
+    color:#1e293b;
+    text-decoration:none;
+    transition:.25s;
+}
+
+.quick-action:hover{
+    background:#eef2ff;
+    color:#4f46e5;
+    transform:translateX(4px);
+}
+
+.quick-action i{
+    width:43px;
+    height:43px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    background:white;
+    font-size:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,.06);
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-responsive{
+    border-radius:15px;
+}
+
+.table{
+    margin:0;
+    vertical-align:middle;
+}
+
+.table thead th{
+    background:linear-gradient(
+        90deg,
+        #4f46e5,
+        #7c3aed
+    );
+    color:white;
+    font-size:16px;
+    font-weight:700;
+    padding:15px;
+    white-space:nowrap;
+    border:0;
+}
+
+.table tbody td{
+    padding:14px 15px;
+    font-size:15px;
+    border-bottom:1px solid #eef2f7;
+    white-space:nowrap;
+}
+
+.table tbody tr:hover{
+    background:#f5f3ff;
+}
+
+.drug-name{
+    font-weight:800;
+    color:#312e81;
+}
+
+.stock-number{
+    font-weight:800;
+    color:#2563eb;
+}
+
+.reorder-number{
+    font-weight:700;
+    color:#7c3aed;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:7px 11px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.status-good{
+    color:#15803d;
+    background:#dcfce7;
+}
+
+.status-low{
+    color:#c2410c;
+    background:#ffedd5;
+}
+
+.status-out{
+    color:#b91c1c;
+    background:#fee2e2;
+}
+
+.status-expired{
+    color:#991b1b;
+    background:#fecaca;
+}
+
+.status-near{
+    color:#7c3aed;
+    background:#ede9fe;
+}
+
+
+/* =========================================================
+   LIVE BADGE
+========================================================= */
+
+.live-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:7px 12px;
+    border-radius:20px;
+    background:#ecfdf5;
+    color:#047857;
+    font-size:11px;
+    font-weight:800;
+}
+
+.live-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#10b981;
+    animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+
+    0%{
+        opacity:1;
+        transform:scale(1);
+    }
+
+    50%{
+        opacity:.4;
+        transform:scale(1.35);
+    }
+
+    100%{
+        opacity:1;
+        transform:scale(1);
+    }
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer{
+    margin-top:30px;
+    text-align:center;
+    color:#64748b;
+    font-size:13px;
+}
+
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+
+.sidebar-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.45);
+    z-index:1500;
+}
+
+.sidebar-overlay.show{
+    display:block;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:992px){
+
+    .sidebar{
+        transform:translateX(-100%);
+    }
+
+    .sidebar.show{
+        transform:translateX(0);
+    }
+
+    .main-content{
+        margin-left:0;
+        padding:18px;
+    }
+
+    .mobile-menu-btn{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .topbar{
+        padding-left:70px;
+    }
+
+}
+
+
+@media(max-width:768px){
+
+    .main-content{
+        padding:12px;
+    }
+
+    .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+        border-radius:16px;
+        padding:18px 18px 18px 70px;
+    }
+
+    .page-title{
+        font-size:24px;
+    }
+
+    .admin-box{
+        width:100%;
+    }
+
+    .chart-container{
+        height:280px;
+    }
+
+    .sales-chart-container{
+        height:250px;
+    }
+
+}
+
+
+@media(max-width:480px){
+
+    .stat-number{
+        font-size:28px;
+    }
+
+    .stat-icon{
+        width:48px;
+        height:48px;
+        font-size:22px;
+    }
+
+    .card-body-custom{
+        padding:15px;
+    }
+
+}
 
 </style>
 
 </head>
 
+
 <body>
 
-<!-- Sidebar -->
 
-<div class="sidebar">
+<!-- =========================================================
+     MOBILE BUTTON
+========================================================= -->
 
-<div class="logo">
-<i class="bi bi-hospital"></i><br>
-PIMS Premium
-</div>
+<button
+class="mobile-menu-btn"
+id="mobileMenuBtn"
+type="button"
+aria-label="Open menu">
 
-<a href="/dashboard" class="active">
-<i class="bi bi-speedometer2"></i>
-Dashboard
-</a>
+<i class="bi bi-list"></i>
 
-<a href="/drugs">
-<i class="bi bi-capsule"></i>
-Drug Management
-</a>
-
-<a href="/sales">
-<i class="bi bi-cart-check"></i>
-Sales
-</a>
-
-<a href="/reports">
-<i class="bi bi-bar-chart"></i>
-Reports
-</a>
-
-<a href="/settings">
-<i class="bi bi-gear"></i>
-Settings
-</a>
-
-<a href="/">
-<i class="bi bi-box-arrow-right"></i>
-Logout
-</a>
-
-</div>
-
-<!-- Main -->
-
-<div class="main">
-
-<div class="header">
-
-<div>
-
-<h3>📊 Dashboard</h3>
-
-<small>Welcome to Pharmacy Inventory Management System</small>
-
-</div>
-
-<div>
-
-<button class="btn btn-primary">
-<i class="bi bi-person-circle"></i>
-Admin
 </button>
 
+
+<div
+class="sidebar-overlay"
+id="sidebarOverlay">
 </div>
 
-</div>
 
-<!-- Cards -->
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
 
-<div class="row g-4">
+<aside
+class="sidebar"
+id="sidebar">
 
-<div class="col-lg-3">
 
-<div class="card-box">
+<div class="brand">
 
-<div class="icon bg1">
+<div class="brand-icon">
+
 <i class="bi bi-capsule"></i>
-</div>
-
-<h2>{{ total_drugs }}</h2>
-
-<p>Total Drugs</p>
 
 </div>
 
-</div>
+<div>
 
-<div class="col-lg-3">
+<h4>
+PIMS Premium
+</h4>
 
-<div class="card-box">
-
-<div class="icon bg2">
-<i class="bi bi-box-seam"></i>
-</div>
-
-<h2>{{ total_stock }}</h2>
-
-<p>Total Stock</p>
+<small>
+Pharmacy Management
+</small>
 
 </div>
 
 </div>
 
-<div class="col-lg-3">
 
-<div class="card-box">
-
-<div class="icon bg3">
-<i class="bi bi-exclamation-triangle"></i>
+<div class="menu-title">
+MAIN MENU
 </div>
 
-<h2>{{ low_stock }}</h2>
 
-<p>Low Stock</p>
+<a
+href="{{ url_for('dashboard') }}"
+class="active">
 
-</div>
+<i class="bi bi-speedometer2"></i>
 
-</div>
+Dashboard
 
-<div class="col-lg-3">
+</a>
 
-<div class="card-box">
 
-<div class="icon bg4">
-<i class="bi bi-calendar-x"></i>
-</div>
+<a href="{{ url_for('drugs') }}">
 
-<h2>{{ expiry_alert }}</h2>
+<i class="bi bi-capsule-pill"></i>
 
-<p>Expiry Alert</p>
+Drug Management
 
-</div>
+</a>
 
-</div>
 
-<div class="col-lg-3">
+<a href="{{ url_for('add_drug') }}">
 
-<div class="card-box">
+<i class="bi bi-plus-circle"></i>
 
-<div class="icon bg5">
+Add Drug
+
+</a>
+
+
+<a href="{{ url_for('sales') }}">
+
 <i class="bi bi-cart-check"></i>
+
+Sales
+
+</a>
+
+
+<a href="{{ url_for('reports') }}">
+
+<i class="bi bi-file-earmark-bar-graph"></i>
+
+Reports
+
+</a>
+
+
+<div class="menu-title mt-3">
+SYSTEM
 </div>
 
-<h2>{{ total_sales }}</h2>
 
-<p>Total Sales</p>
+<a href="{{ url_for('settings') }}">
 
-</div>
+<i class="bi bi-gear"></i>
 
-</div>
+Settings
 
-</div>
-<!-- ========================= -->
-<!-- Stock Chart -->
-<!-- ========================= -->
+</a>
 
-<div class="row mt-4">
 
-    <div class="col-lg-8">
+<a href="{{ url_for('logout') }}">
 
-        <div class="card shadow border-0 rounded-4">
+<i class="bi bi-box-arrow-right"></i>
 
-            <div class="card-header bg-primary text-white">
+Logout
 
-                <h5 class="mb-0">
-                    <i class="bi bi-bar-chart-fill"></i>
-                    Drug Stock Overview
-                </h5>
+</a>
 
-            </div>
 
-            <div class="card-body">
+</aside>
 
-                <canvas id="stockChart" height="120"></canvas>
 
-            </div>
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
 
-        </div>
+<main class="main-content">
 
-    </div>
 
-<!-- ========================= -->
-<!-- Quick Statistics -->
-<!-- ========================= -->
+<!-- TOPBAR -->
 
-    <div class="col-lg-4">
+<div class="topbar">
 
-        <div class="card shadow border-0 rounded-4">
+<div>
 
-            <div class="card-header bg-success text-white">
+<h1 class="page-title">
+💊 Pharmacy Dashboard
+</h1>
 
-                <h5 class="mb-0">
-
-                    <i class="bi bi-graph-up-arrow"></i>
-
-                    Quick Statistics
-
-                </h5>
-
-            </div>
-
-            <div class="card-body">
-
-                <div class="mb-4">
-
-                    <h6>Total Medicines</h6>
-
-                    <h3 class="text-primary">
-                        {{ total_drugs }}
-                    </h3>
-
-                </div>
-
-                <hr>
-
-                <div class="mb-4">
-
-                    <h6>Total Sales</h6>
-
-                    <h3 class="text-success">
-                        {{ total_sales }}
-                    </h3>
-
-                </div>
-
-                <hr>
-
-                <div class="mb-4">
-
-                    <h6>Low Stock</h6>
-
-                    <h3 class="text-warning">
-                        {{ low_stock }}
-                    </h3>
-
-                </div>
-
-                <hr>
-
-                <div>
-
-                    <h6>Expiry Alert</h6>
-
-                    <h3 class="text-danger">
-                        {{ expiry_alert }}
-                    </h3>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+<p class="page-subtitle">
+Pharmacy Inventory Management System
+</p>
 
 </div>
 
-<!-- ========================= -->
-<!-- Recent Drugs -->
-<!-- ========================= -->
 
-<div class="card shadow border-0 rounded-4 mt-4">
+<div class="admin-box">
 
-<div class="card-header bg-dark text-white">
+<div class="admin-icon">
 
-<h5 class="mb-0">
+<i class="bi bi-person-fill"></i>
+
+</div>
+
+<div>
+
+<strong>
+Administrator
+</strong>
+
+<br>
+
+<small class="text-muted">
+System Admin
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     STAT CARDS
+====================================================== -->
+
+<div class="row g-4 mb-4">
+
+
+<!-- TOTAL DRUGS -->
+
+<div class="col-xl-3 col-md-6">
+
+<div class="stat-card card-blue">
+
+<div class="stat-top">
+
+<div>
+
+<div class="stat-label">
+TOTAL DRUGS
+</div>
+
+<h2 class="stat-number">
+{{ total_drugs|default(0) }}
+</h2>
+
+</div>
+
+<div class="stat-icon">
 
 <i class="bi bi-capsule"></i>
 
-Recently Added Drugs
+</div>
+
+</div>
+
+<div class="stat-footer">
+Medicines in inventory
+</div>
+
+</div>
+
+</div>
+
+
+<!-- TOTAL STOCK -->
+
+<div class="col-xl-3 col-md-6">
+
+<div class="stat-card card-green">
+
+<div class="stat-top">
+
+<div>
+
+<div class="stat-label">
+TOTAL STOCK
+</div>
+
+<h2 class="stat-number">
+{{ total_stock|default(0) }}
+</h2>
+
+</div>
+
+<div class="stat-icon">
+
+<i class="bi bi-box-seam"></i>
+
+</div>
+
+</div>
+
+<div class="stat-footer">
+Available medicine units
+</div>
+
+</div>
+
+</div>
+
+
+<!-- LOW STOCK -->
+
+<div class="col-xl-3 col-md-6">
+
+<div class="stat-card card-orange">
+
+<div class="stat-top">
+
+<div>
+
+<div class="stat-label">
+LOW STOCK
+</div>
+
+<h2 class="stat-number">
+{{ low_stock|default(0) }}
+</h2>
+
+</div>
+
+<div class="stat-icon">
+
+<i class="bi bi-exclamation-triangle"></i>
+
+</div>
+
+</div>
+
+<div class="stat-footer">
+Medicines need restocking
+</div>
+
+</div>
+
+</div>
+
+
+<!-- EXPIRED -->
+
+<div class="col-xl-3 col-md-6">
+
+<div class="stat-card card-red">
+
+<div class="stat-top">
+
+<div>
+
+<div class="stat-label">
+EXPIRED
+</div>
+
+<h2 class="stat-number">
+{{ expired|default(0) }}
+</h2>
+
+</div>
+
+<div class="stat-icon">
+
+<i class="bi bi-calendar-x"></i>
+
+</div>
+
+</div>
+
+<div class="stat-footer">
+Expired medicines
+</div>
+
+</div>
+
+</div>
+
+
+<!-- NEAR EXPIRY -->
+
+<div class="col-xl-3 col-md-6">
+
+<div class="stat-card card-purple">
+
+<div class="stat-top">
+
+<div>
+
+<div class="stat-label">
+NEAR EXPIRY
+</div>
+
+<h2 class="stat-number">
+{{ near_expiry|default(0) }}
+</h2>
+
+</div>
+
+<div class="stat-icon">
+
+<i class="bi bi-clock-history"></i>
+
+</div>
+
+</div>
+
+<div class="stat-footer">
+Expiring within 30 days
+</div>
+
+</div>
+
+</div>
+
+
+<!-- REORDER -->
+
+<div class="col-xl-3 col-md-6">
+
+<div class="stat-card card-pink">
+
+<div class="stat-top">
+
+<div>
+
+<div class="stat-label">
+REORDER
+</div>
+
+<h2 class="stat-number">
+{{ reorder_count|default(0) }}
+</h2>
+
+</div>
+
+<div class="stat-icon">
+
+<i class="bi bi-arrow-repeat"></i>
+
+</div>
+
+</div>
+
+<div class="stat-footer">
+Medicines requiring reorder
+</div>
+
+</div>
+
+</div>
+
+
+<!-- TOTAL SALES -->
+
+<div class="col-xl-3 col-md-6">
+
+<div class="stat-card card-blue">
+
+<div class="stat-top">
+
+<div>
+
+<div class="stat-label">
+TOTAL SALES
+</div>
+
+<h2 class="stat-number">
+{{ total_sales|default(0) }}
+</h2>
+
+</div>
+
+<div class="stat-icon">
+
+<i class="bi bi-cart-check"></i>
+
+</div>
+
+</div>
+
+<div class="stat-footer">
+Total sales transactions
+</div>
+
+</div>
+
+</div>
+
+
+<!-- TOTAL REVENUE -->
+
+<div class="col-xl-3 col-md-6">
+
+<div class="stat-card card-dark">
+
+<div class="stat-top">
+
+<div>
+
+<div class="stat-label">
+TOTAL REVENUE
+</div>
+
+<h2 class="stat-number">
+
+₹{{ "%.2f"|format(
+total_sales_amount|default(0)|float
+) }}
+
+</h2>
+
+</div>
+
+<div class="stat-icon">
+
+<i class="bi bi-currency-rupee"></i>
+
+</div>
+
+</div>
+
+<div class="stat-footer">
+Total sales revenue
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     CHARTS
+====================================================== -->
+
+<div class="row g-4 mb-4">
+
+
+<!-- STOCK CHART -->
+
+<div class="col-xl-8">
+
+<div class="content-card">
+
+<div class="card-header-custom">
+
+<h5>
+
+<i class="bi bi-bar-chart-fill text-primary me-2"></i>
+
+Drug Stock Overview
+
+</h5>
+
+<span class="live-badge">
+
+<span class="live-dot"></span>
+
+Live Inventory
+
+</span>
+
+</div>
+
+
+<div class="card-body-custom">
+
+<div class="chart-container">
+
+<canvas id="stockChart"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- SALES CHART -->
+
+<div class="col-xl-4">
+
+<div class="content-card">
+
+<div class="card-header-custom">
+
+<h5>
+
+<i class="bi bi-graph-up-arrow text-success me-2"></i>
+
+Sales Overview
 
 </h5>
 
 </div>
 
-<div class="card-body">
+
+<div class="card-body-custom">
+
+<div class="sales-chart-container">
+
+<canvas id="salesChart"></canvas>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     ALERTS
+====================================================== -->
+
+<div class="row g-4 mb-4">
+
+
+<!-- INVENTORY ALERTS -->
+
+<div class="col-xl-7">
+
+<div class="content-card">
+
+<div class="card-header-custom">
+
+<h5>
+
+<i class="bi bi-bell-fill text-danger me-2"></i>
+
+Inventory Alerts
+
+</h5>
+
+<span class="badge bg-danger">
+Important
+</span>
+
+</div>
+
+
+<div class="card-body-custom">
+
+
+<!-- LOW STOCK -->
+
+<a
+href="{{ url_for('drugs') }}"
+class="alert-box alert-low">
+
+<div class="alert-icon">
+
+<i class="bi bi-exclamation-triangle-fill"></i>
+
+</div>
+
+<div class="flex-grow-1">
+
+<strong>
+Low Stock Medicines
+</strong>
+
+<br>
+
+<small>
+
+{{ low_stock|default(0) }}
+
+medicines need restocking.
+
+</small>
+
+</div>
+
+<i class="bi bi-chevron-right"></i>
+
+</a>
+
+
+<!-- EXPIRED -->
+
+<a
+href="{{ url_for('drugs') }}"
+class="alert-box alert-expired">
+
+<div class="alert-icon">
+
+<i class="bi bi-calendar-x-fill"></i>
+
+</div>
+
+<div class="flex-grow-1">
+
+<strong>
+Expired Medicines
+</strong>
+
+<br>
+
+<small>
+
+{{ expired|default(0) }}
+
+expired medicines found.
+
+</small>
+
+</div>
+
+<i class="bi bi-chevron-right"></i>
+
+</a>
+
+
+<!-- NEAR EXPIRY -->
+
+<a
+href="{{ url_for('drugs') }}"
+class="alert-box alert-near">
+
+<div class="alert-icon">
+
+<i class="bi bi-clock-history"></i>
+
+</div>
+
+<div class="flex-grow-1">
+
+<strong>
+Near Expiry
+</strong>
+
+<br>
+
+<small>
+
+{{ near_expiry|default(0) }}
+
+medicines expire within 30 days.
+
+</small>
+
+</div>
+
+<i class="bi bi-chevron-right"></i>
+
+</a>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- QUICK ACTIONS -->
+
+<div class="col-xl-5">
+
+<div class="content-card">
+
+<div class="card-header-custom">
+
+<h5>
+⚡ Quick Actions
+</h5>
+
+</div>
+
+
+<div class="card-body-custom">
+
+
+<a
+href="{{ url_for('add_drug') }}"
+class="quick-action">
+
+<i class="bi bi-plus-circle text-primary"></i>
+
+<div>
+
+<strong>
+Add New Drug
+</strong>
+
+<br>
+
+<small class="text-muted">
+Add medicine to inventory
+</small>
+
+</div>
+
+</a>
+
+
+<a
+href="{{ url_for('sales') }}"
+class="quick-action">
+
+<i class="bi bi-cart-plus text-success"></i>
+
+<div>
+
+<strong>
+New Sale
+</strong>
+
+<br>
+
+<small class="text-muted">
+Create sales transaction
+</small>
+
+</div>
+
+</a>
+
+
+<a
+href="{{ url_for('reports') }}"
+class="quick-action">
+
+<i class="bi bi-file-earmark-bar-graph text-danger"></i>
+
+<div>
+
+<strong>
+View Reports
+</strong>
+
+<br>
+
+<small class="text-muted">
+Check pharmacy reports
+</small>
+
+</div>
+
+</a>
+
+
+<a
+href="{{ url_for('drugs') }}"
+class="quick-action">
+
+<i class="bi bi-capsule-pill text-primary"></i>
+
+<div>
+
+<strong>
+Drug Inventory
+</strong>
+
+<br>
+
+<small class="text-muted">
+Manage all medicines
+</small>
+
+</div>
+
+</a>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     INVENTORY TABLE
+====================================================== -->
+
+<div class="content-card mb-4">
+
+
+<div class="card-header-custom">
+
+<h5>
+
+<i class="bi bi-table text-primary me-2"></i>
+
+Drug Inventory Overview
+
+</h5>
+
+
+<a
+href="{{ url_for('drugs') }}"
+class="btn btn-primary btn-sm">
+
+View All
+
+<i class="bi bi-arrow-right"></i>
+
+</a>
+
+</div>
+
+
+<div class="card-body p-0">
 
 <div class="table-responsive">
 
-<table class="table table-hover align-middle">
+<table class="table">
 
-<thead class="table-primary">
+<thead>
 
 <tr>
 
 <th>Sr No</th>
-
 <th>Drug Name</th>
-
+<th>Brand Name</th>
+<th>Category</th>
 <th>Total Stock</th>
-
+<th>Expiry Date</th>
+<th>Reorder Level</th>
 <th>Status</th>
 
 </tr>
 
 </thead>
 
+
 <tbody>
 
-{% for drug in drugs %}
+
+{% for drug in recent_drugs|default([], true) %}
+
+
+{% set stock = drug.get('stock', 0)|int %}
+
+{% set reorder = drug.get('reorder_level', 10)|int %}
+
 
 <tr>
 
-<td>{{ loop.index }}</td>
-
-<td>{{ drug[0] }}</td>
-
-<td>{{ drug[1] }}</td>
 
 <td>
 
-{% if drug[1] > 10 %}
+<strong>
+{{ loop.index }}
+</strong>
 
-<span class="badge bg-success">
+</td>
 
-Available
+
+<td>
+
+<span class="drug-name">
+
+<i class="bi bi-capsule-pill me-1"></i>
+
+{{ drug.get('drug_name', 'N/A') }}
 
 </span>
 
+</td>
+
+
+<td>
+
+{% if drug.get('brand_name') %}
+
+{{ drug.get('brand_name') }}
+
 {% else %}
 
-<span class="badge bg-danger">
-
-Low Stock
-
+<span class="text-muted">
+N/A
 </span>
 
 {% endif %}
 
 </td>
 
+
+<td>
+
+{% if drug.get('category') %}
+
+{{ drug.get('category') }}
+
+{% else %}
+
+<span class="text-muted">
+N/A
+</span>
+
+{% endif %}
+
+</td>
+
+
+<td>
+
+<span class="stock-number">
+{{ stock }}
+</span>
+
+units
+
+</td>
+
+
+<td>
+
+{% if drug.get('expiry_date') %}
+
+<i class="bi bi-calendar3 text-danger me-1"></i>
+
+{{ drug.get('expiry_date') }}
+
+{% else %}
+
+<span class="text-muted">
+N/A
+</span>
+
+{% endif %}
+
+</td>
+
+
+<td>
+
+<span class="reorder-number">
+{{ reorder }}
+</span>
+
+units
+
+</td>
+
+
+<td>
+
+
+{% if drug.get('status') == 'Expired' %}
+
+<span class="status status-expired">
+
+<i class="bi bi-x-octagon-fill"></i>
+
+Expired
+
+</span>
+
+
+{% elif drug.get('status') == 'Near Expiry' %}
+
+<span class="status status-near">
+
+<i class="bi bi-clock-fill"></i>
+
+Near Expiry
+
+</span>
+
+
+{% elif drug.get('status') == 'Out of Stock' %}
+
+<span class="status status-out">
+
+<i class="bi bi-x-circle-fill"></i>
+
+Out of Stock
+
+</span>
+
+
+{% elif drug.get('status') == 'Low Stock' %}
+
+<span class="status status-low">
+
+<i class="bi bi-exclamation-triangle-fill"></i>
+
+Low Stock
+
+</span>
+
+
+{% else %}
+
+<span class="status status-good">
+
+<i class="bi bi-check-circle-fill"></i>
+
+In Stock
+
+</span>
+
+{% endif %}
+
+
+</td>
+
+
 </tr>
 
+
+{% else %}
+
+
+<tr>
+
+<td
+colspan="8"
+class="text-center py-5">
+
+<i class="bi bi-inbox fs-1 text-muted"></i>
+
+<h5 class="mt-3">
+No Drug Data
+</h5>
+
+<p class="text-muted">
+Add medicines to see inventory here.
+</p>
+
+<a
+href="{{ url_for('add_drug') }}"
+class="btn btn-primary">
+
+<i class="bi bi-plus-circle"></i>
+
+Add First Drug
+
+</a>
+
+</td>
+
+</tr>
+
+
 {% endfor %}
+
 
 </tbody>
 
@@ -459,93 +1882,527 @@ Low Stock
 
 </div>
 
-<!-- ========================= -->
-<!-- Chart.js -->
-<!-- ========================= -->
+
+<!-- =====================================================
+     FOOTER
+====================================================== -->
+
+<footer class="footer">
+
+<hr>
+
+© 2026
+
+<strong>
+PIMS Premium
+</strong>
+
+|
+
+Pharmacy Inventory Management System
+
+<br>
+
+<small>
+Secure • Smart • Professional
+</small>
+
+</footer>
+
+
+</main>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
 
 <script>
 
- const ctx = document.getElementById('stockChart');
+/* =========================================================
+   FLASK DATA
+========================================================= */
 
- new Chart(ctx, {
+const labels =
+    {{ labels|default([])|tojson }};
 
-    type: 'bar',
+const stockData =
+    {{ stock_data|default([])|tojson }};
 
-    data: {
+const salesLabels =
+    {{ sales_labels|default([])|tojson }};
 
-         labels: {{ labels|tojson }},
+const salesData =
+    {{ sales_data|default([])|tojson }};
 
-         datasets: [{
 
-            label: 'Stock',
+/* =========================================================
+   STOCK CHART
+========================================================= */
 
-            data: {{ stock_data|tojson }},
+const stockCanvas =
+    document.getElementById("stockChart");
 
-            borderWidth: 2,
+if (stockCanvas && typeof Chart !== "undefined") {
 
-            borderRadius: 10,
+    const ctx =
+        stockCanvas.getContext("2d");
 
-            backgroundColor: [
-                '#4f46e5',
-                '#22c55e',
-                '#f59e0b',
-                '#ef4444',
-                '#3b82f6'
-            ]
+    const gradient =
+        ctx.createLinearGradient(
+            0,
+            0,
+            0,
+            350
+        );
 
-        }]
+    gradient.addColorStop(
+        0,
+        "rgba(79,70,229,.85)"
+    );
 
-    },
+    gradient.addColorStop(
+        1,
+        "rgba(6,182,212,.25)"
+    );
 
-    options: {
 
-        responsive: true,
+    new Chart(ctx, {
 
-        plugins: {
+        type:"bar",
 
-            legend: {
+        data:{
 
-                display: true
+            labels:
+                Array.isArray(labels)
+                    ? labels
+                    : [],
 
-            }
+            datasets:[{
+
+                label:"Total Stock",
+
+                data:
+                    Array.isArray(stockData)
+                        ? stockData
+                        : [],
+
+                backgroundColor:gradient,
+
+                borderColor:"#4f46e5",
+
+                borderWidth:2,
+
+                borderRadius:8,
+
+                hoverBackgroundColor:"#7c3aed"
+
+            }]
 
         },
 
-        scales: {
+        options:{
 
-            y: {
+            responsive:true,
 
-                beginAtZero: true
+            maintainAspectRatio:false,
+
+            interaction:{
+
+                intersect:false,
+
+                mode:"index"
+
+            },
+
+            plugins:{
+
+                legend:{
+
+                    display:true
+
+                },
+
+                tooltip:{
+
+                    callbacks:{
+
+                        label:function(context){
+
+                            return " Stock: "
+                                + context.raw
+                                + " units";
+
+                        }
+
+                    }
+
+                }
+
+            },
+
+            scales:{
+
+                y:{
+
+                    beginAtZero:true,
+
+                    ticks:{
+
+                        precision:0
+
+                    },
+
+                    grid:{
+
+                        color:
+                            "rgba(148,163,184,.15)"
+
+                    }
+
+                },
+
+                x:{
+
+                    grid:{
+
+                        display:false
+
+                    }
+
+                }
 
             }
 
         }
 
+    });
+
+}
+
+
+/* =========================================================
+   SALES CHART
+========================================================= */
+
+const salesCanvas =
+    document.getElementById("salesChart");
+
+
+if (
+    salesCanvas &&
+    typeof Chart !== "undefined"
+) {
+
+    const salesCtx =
+        salesCanvas.getContext("2d");
+
+
+    const safeSalesLabels =
+        Array.isArray(salesLabels) &&
+        salesLabels.length > 0
+
+        ? salesLabels
+
+        : ["Sales"];
+
+
+    const safeSalesData =
+        Array.isArray(salesData) &&
+        salesData.length > 0
+
+        ? salesData
+
+        : [
+
+            Number(
+                "{{ total_sales|default(0) }}"
+            ) || 0
+
+          ];
+
+
+    new Chart(salesCtx, {
+
+        type:"line",
+
+        data:{
+
+            labels:safeSalesLabels,
+
+            datasets:[{
+
+                label:"Sales",
+
+                data:safeSalesData,
+
+                borderColor:"#16a34a",
+
+                backgroundColor:
+                    "rgba(34,197,94,.12)",
+
+                borderWidth:3,
+
+                fill:true,
+
+                tension:.4,
+
+                pointRadius:4,
+
+                pointHoverRadius:7
+
+            }]
+
+        },
+
+        options:{
+
+            responsive:true,
+
+            maintainAspectRatio:false,
+
+            plugins:{
+
+                legend:{
+
+                    display:true
+
+                }
+
+            },
+
+            scales:{
+
+                y:{
+
+                    beginAtZero:true,
+
+                    ticks:{
+
+                        precision:0
+
+                    },
+
+                    grid:{
+
+                        color:
+                            "rgba(148,163,184,.15)"
+
+                    }
+
+                },
+
+                x:{
+
+                    grid:{
+
+                        display:false
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
+const mobileMenuBtn =
+    document.getElementById(
+        "mobileMenuBtn"
+    );
+
+const sidebar =
+    document.getElementById(
+        "sidebar"
+    );
+
+const sidebarOverlay =
+    document.getElementById(
+        "sidebarOverlay"
+    );
+
+
+function openSidebar(){
+
+    if(sidebar){
+
+        sidebar.classList.add(
+            "show"
+        );
+
     }
 
-});
+    if(sidebarOverlay){
+
+        sidebarOverlay.classList.add(
+            "show"
+        );
+
+    }
+
+}
+
+
+function closeSidebar(){
+
+    if(sidebar){
+
+        sidebar.classList.remove(
+            "show"
+        );
+
+    }
+
+    if(sidebarOverlay){
+
+        sidebarOverlay.classList.remove(
+            "show"
+        );
+
+    }
+
+}
+
+
+if(mobileMenuBtn){
+
+    mobileMenuBtn.addEventListener(
+        "click",
+        openSidebar
+    );
+
+}
+
+
+if(sidebarOverlay){
+
+    sidebarOverlay.addEventListener(
+        "click",
+        closeSidebar
+    );
+
+}
+
+
+document
+    .querySelectorAll(".sidebar a")
+    .forEach(function(link){
+
+        link.addEventListener(
+            "click",
+            function(){
+
+                if(
+                    window.innerWidth <= 992
+                ){
+
+                    closeSidebar();
+
+                }
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   CARD NUMBER ANIMATION
+========================================================= */
+
+document
+    .querySelectorAll(".stat-number")
+    .forEach(function(element){
+
+        const originalText =
+            element.innerText.trim();
+
+
+        const number =
+            parseFloat(
+                originalText.replace(
+                    /[^\d.]/g,
+                    ""
+                )
+            );
+
+
+        if(
+            !isNaN(number) &&
+            number >= 0 &&
+            number < 1000000
+        ){
+
+            let current = 0;
+
+            const duration = 700;
+
+            const steps = 30;
+
+            const increment =
+                number / steps;
+
+            let count = 0;
+
+
+            const timer =
+                setInterval(function(){
+
+                    current += increment;
+
+                    count++;
+
+
+                    if(count >= steps){
+
+                        current = number;
+
+                        clearInterval(timer);
+
+                    }
+
+
+                    if(
+                        originalText.includes("₹")
+                    ){
+
+                        element.innerText =
+                            "₹" +
+                            current.toFixed(2);
+
+                    }
+
+                    else{
+
+                        element.innerText =
+                            Math.floor(current);
+
+                    }
+
+                }, duration / steps);
+
+        }
+
+    }); // IMPORTANT: closing fixed
+
 
 </script>
 
-<!-- ========================= -->
-<!-- Footer -->
-<!-- ========================= -->
 
-<footer class="text-center mt-5 mb-4 text-muted">
+<script
+src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
-    <hr>
-
-    <h6>
-        © 2026 <strong>PIMS Premium</strong><br>
-        Pharmacy Inventory Management System
-    </h6>
-
-</footer>
-
-</div>
-<!-- End Main -->
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

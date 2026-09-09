@@ -14,70 +14,114 @@
 <style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
 }
 
 body{
-background:#eef2ff;
+    background:#eef2ff;
 }
 
 .sidebar{
-position:fixed;
-top:0;
-left:0;
-width:260px;
-height:100vh;
-background:linear-gradient(180deg,#4f46e5,#7c3aed);
-padding:25px;
-color:white;
+    position:fixed;
+    top:0;
+    left:0;
+    width:260px;
+    height:100vh;
+    background:linear-gradient(180deg,#4f46e5,#7c3aed);
+    padding:25px;
+    color:white;
+    overflow-y:auto;
 }
 
 .logo{
-font-size:28px;
-font-weight:bold;
-text-align:center;
-margin-bottom:35px;
+    font-size:28px;
+    font-weight:bold;
+    text-align:center;
+    margin-bottom:35px;
 }
 
 .sidebar a{
-display:block;
-padding:14px 18px;
-margin-bottom:10px;
-text-decoration:none;
-color:white;
-border-radius:12px;
-transition:.3s;
+    display:block;
+    padding:14px 18px;
+    margin-bottom:10px;
+    text-decoration:none;
+    color:white;
+    border-radius:12px;
+    transition:.3s;
 }
 
 .sidebar a:hover,
 .sidebar a.active{
-background:rgba(255,255,255,.18);
+    background:rgba(255,255,255,.18);
 }
 
 .main{
-margin-left:260px;
-padding:25px;
+    margin-left:260px;
+    padding:25px;
 }
 
 .header{
-background:white;
-padding:20px;
-border-radius:18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
-margin-bottom:25px;
+    background:white;
+    padding:20px;
+    border-radius:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    margin-bottom:25px;
 }
 
 .card-box{
-background:white;
-padding:25px;
-border-radius:18px;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.form-label{
+    font-weight:600;
+    color:#374151;
+}
+
+.form-control{
+    min-height:48px;
+    border-radius:10px;
+}
+
+.form-control:focus{
+    border-color:#4f46e5;
+    box-shadow:0 0 0 .2rem rgba(79,70,229,.15);
+}
+
+.section-title{
+    font-size:20px;
+    font-weight:700;
+    color:#4f46e5;
+    margin-bottom:20px;
+    border-bottom:2px solid #eef2ff;
+    padding-bottom:10px;
+}
+
+@media(max-width:768px){
+
+    .sidebar{
+        width:210px;
+    }
+
+    .main{
+        margin-left:210px;
+        padding:15px;
+    }
+
+    .header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+
 }
 
 </style>
@@ -86,291 +130,390 @@ box-shadow:0 8px 20px rgba(0,0,0,.08);
 
 <body>
 
-<!-- Sidebar -->
+<!-- ================= SIDEBAR ================= -->
 
 <div class="sidebar">
 
-<div class="logo">
-<i class="bi bi-hospital"></i><br>
-PIMS Premium
+    <div class="logo">
+        <i class="bi bi-hospital"></i><br>
+        PIMS Premium
+    </div>
+
+    <a href="/dashboard">
+        <i class="bi bi-speedometer2"></i>
+        Dashboard
+    </a>
+
+    <a href="/drugs" class="active">
+        <i class="bi bi-capsule"></i>
+        Drug Management
+    </a>
+
+    <a href="/sales">
+        <i class="bi bi-cart-check"></i>
+        Sales
+    </a>
+
+    <a href="/reports">
+        <i class="bi bi-bar-chart"></i>
+        Reports
+    </a>
+
+    <a href="/settings">
+        <i class="bi bi-gear"></i>
+        Settings
+    </a>
+
+    <a href="/">
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+    </a>
+
 </div>
 
-<a href="/dashboard">
-<i class="bi bi-speedometer2"></i>
-Dashboard
-</a>
 
-<a href="/drugs" class="active">
-<i class="bi bi-capsule"></i>
-Drug Management
-</a>
-
-<a href="/sales">
-<i class="bi bi-cart-check"></i>
-Sales
-</a>
-
-<a href="/reports">
-<i class="bi bi-bar-chart"></i>
-Reports
-</a>
-
-<a href="/settings">
-<i class="bi bi-gear"></i>
-Settings
-</a>
-
-<a href="/">
-<i class="bi bi-box-arrow-right"></i>
-Logout
-</a>
-
-</div>
-
-<!-- Main -->
+<!-- ================= MAIN ================= -->
 
 <div class="main">
 
-<div class="header">
+    <!-- HEADER -->
 
-<div>
+    <div class="header">
 
-<h3>💊 Add New Drug</h3>
+        <div>
 
-<small>Add medicine into pharmacy inventory</small>
+            <h3>💊 Add New Drug</h3>
+
+            <small>
+                Add medicine into pharmacy inventory
+            </small>
+
+        </div>
+
+        <a href="/drugs" class="btn btn-secondary">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back
+
+        </a>
+
+    </div>
+
+
+    <!-- ================= FORM CARD ================= -->
+
+    <div class="card-box">
+
+        <form action="/add-drug" method="POST">
+
+            <!-- BASIC INFORMATION -->
+
+            <div class="section-title">
+
+                <i class="bi bi-capsule"></i>
+                Basic Drug Information
+
+            </div>
+
+
+            <div class="row">
+
+                <!-- Drug Name -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Drug Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="drug_name"
+                        class="form-control"
+                        placeholder="Enter drug name"
+                        required>
+
+                </div>
+
+
+                <!-- Brand Name -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Brand Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="brand_name"
+                        class="form-control"
+                        placeholder="Enter brand name"
+                        required>
+
+                </div>
+
+
+                <!-- Pharmacological Class -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Pharmacological Class
+                    </label>
+
+                    <input
+                        type="text"
+                        name="pharmacological_class"
+                        class="form-control"
+                        placeholder="Example: Analgesic">
+
+                </div>
+
+
+                <!-- Category -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Category
+                    </label>
+
+                    <input
+                        type="text"
+                        name="category"
+                        class="form-control"
+                        placeholder="Example: Pain Relief">
+
+                </div>
+
+
+                <!-- Schedule -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Schedule
+                    </label>
+
+                    <input
+                        type="text"
+                        name="schedule"
+                        class="form-control"
+                        placeholder="Example: H / H1 / X / OTC">
+
+                </div>
+
+
+                <!-- Dosage Form -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Dosage Form
+                    </label>
+
+                    <input
+                        type="text"
+                        name="dosage_form"
+                        class="form-control"
+                        placeholder="Example: Tablet / Capsule / Syrup">
+
+                </div>
+
+
+                <!-- Storage -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Storage
+                    </label>
+
+                    <input
+                        type="text"
+                        name="storage"
+                        class="form-control"
+                        placeholder="Example: Store below 25°C">
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= INVENTORY ================= -->
+
+            <div class="section-title mt-4">
+
+                <i class="bi bi-box-seam"></i>
+                Inventory Information
+
+            </div>
+
+
+            <div class="row">
+
+                <!-- Total Stock -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Total Stock
+                    </label>
+
+                    <input
+                        type="number"
+                        id="total_stock"
+                        name="total_stock"
+                        class="form-control"
+                        min="0"
+                        placeholder="Enter total stock"
+                        required>
+
+                </div>
+
+
+                <!-- Reorder Level -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Reorder Level
+                    </label>
+
+                    <input
+                        type="number"
+                        name="reorder_level"
+                        class="form-control"
+                        min="0"
+                        placeholder="Example: 20"
+                        required>
+
+                </div>
+
+
+                <!-- Expiry Date -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Expiry Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="expiry_date"
+                        class="form-control"
+                        required>
+
+                </div>
+
+
+                <!-- Price -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Price (₹)
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        name="price"
+                        class="form-control"
+                        placeholder="Enter price"
+                        required>
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Status
+                    </label>
+
+                    <input
+                        type="text"
+                        name="status"
+                        class="form-control"
+                        placeholder="Example: Available">
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= BUTTONS ================= -->
+
+            <div class="mt-4 pt-3 border-top">
+
+                <button
+                    type="submit"
+                    class="btn btn-success btn-lg">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    Save Drug
+
+                </button>
+
+
+                <button
+                    type="reset"
+                    class="btn btn-secondary btn-lg ms-2">
+
+                    <i class="bi bi-arrow-clockwise"></i>
+
+                    Reset
+
+                </button>
+
+
+                <a
+                    href="/drugs"
+                    class="btn btn-danger btn-lg ms-2">
+
+                    <i class="bi bi-x-circle"></i>
+
+                    Cancel
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="text-center mt-5 text-muted">
+
+        <hr>
+
+        <p class="mb-0">
+
+            © 2026
+            <strong>PIMS Premium</strong>
+            |
+            Pharmacy Inventory Management System
+
+        </p>
+
+    </footer>
 
 </div>
 
-<a href="/drugs" class="btn btn-secondary">
-<i class="bi bi-arrow-left"></i>
-Back
-</a>
-
-</div>
-
-<div class="card-box">
-
-<form action="/add-drug" method="POST">
-
-<div class="row">
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Drug Name
-</label>
-
-<input
-type="text"
-name="drug_name"
-class="form-control"
-required>
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Brand Name
-</label>
-
-<input
-type="text"
-name="brand_name"
-class="form-control"
-required>
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Pharmacological Class
-</label>
-
-<input
-type="text"
-name="pharmacological_class"
-class="form-control">
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Schedule
-</label>
-
-<input
-type="text"
-name="schedule"
-class="form-control">
-
-</div>
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Dosage Form
-</label>
-
-<input
-type="text"
-name="dosage_form"
-class="form-control"
-placeholder="Tablet / Capsule / Syrup">
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Storage
-</label>
-
-<input
-type="text"
-name="storage"
-class="form-control"
-placeholder="Store below 25°C">
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Category
-</label>
-
-<select
-name="category"
-class="form-select">
-
-<option value="">Select Category</option>
-<option>Tablet</option>
-<option>Capsule</option>
-<option>Syrup</option>
-<option>Injection</option>
-<option>Cream</option>
-<option>Drops</option>
-
-</select>
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Total Stock
-</label>
-
-<input
-    type="number"
-    class="form-control"
-    id="total_stock"
-    name="total_stock"
-    required
->
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Reorder Level
-</label>
-
-<input
-type="number"
-name="reorder_level"
-class="form-control"
-required>
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Expiry Date
-</label>
-
-<input
-type="date"
-name="expiry_date"
-class="form-control"
-required>
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Price (₹)
-</label>
-
-<input
-type="number"
-step="0.01"
-name="price"
-class="form-control"
-required>
-
-</div>
-
-</div>
-
-<div class="mt-4">
-
-<button
-type="submit"
-class="btn btn-success btn-lg">
-
-<i class="bi bi-check-circle"></i>
-Save Drug
-
-</button>
-
-<button
-type="reset"
-class="btn btn-secondary btn-lg ms-2">
-
-<i class="bi bi-arrow-clockwise"></i>
-Reset
-
-</button>
-
-<a
-href="/drugs"
-class="btn btn-danger btn-lg ms-2">
-
-<i class="bi bi-x-circle"></i>
-Cancel
-
-</a>
-
-</div>
-
-</form>
-
-</div>
-<!-- Footer -->
-
-<footer class="text-center mt-5 text-muted">
-
-<hr>
-
-<p class="mb-0">
-
-© 2026 <strong>PIMS Premium</strong> |
-Pharmacy Inventory Management System
-
-</p>
-
-</footer>
-
-</div>
-<!-- End Main -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

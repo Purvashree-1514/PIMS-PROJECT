@@ -8,78 +8,174 @@
 
 <title>PIMS Premium - Settings</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet">
+
+<link
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+rel="stylesheet">
 
 <style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
+    box-sizing:border-box;
 }
 
 body{
-background:#eef2ff;
-overflow-x:hidden;
+    margin:0;
+    font-family:'Segoe UI',Arial,sans-serif;
+    background:#eef2ff;
+    color:#333;
+    overflow-x:hidden;
 }
 
+/* ================= SIDEBAR ================= */
+
 .sidebar{
-position:fixed;
-left:0;
-top:0;
-width:260px;
-height:100vh;
-background:linear-gradient(180deg,#4f46e5,#7c3aed);
-padding:25px;
-color:#fff;
+    position:fixed;
+    left:0;
+    top:0;
+    width:260px;
+    height:100vh;
+    background:linear-gradient(180deg,#4f46e5,#7c3aed);
+    padding:25px 18px;
+    color:#fff;
+    overflow-y:auto;
 }
 
 .logo{
-font-size:28px;
-font-weight:bold;
-text-align:center;
-margin-bottom:35px;
+    font-size:24px;
+    font-weight:700;
+    text-align:center;
+    margin-bottom:35px;
 }
 
 .sidebar a{
-display:block;
-padding:14px 18px;
-margin-bottom:10px;
-text-decoration:none;
-color:#fff;
-border-radius:12px;
-transition:.3s;
+    display:block;
+    padding:14px 18px;
+    margin-bottom:10px;
+    text-decoration:none;
+    color:#fff;
+    border-radius:12px;
+    transition:.3s;
+    font-size:15px;
+}
+
+.sidebar a i{
+    margin-right:10px;
 }
 
 .sidebar a:hover,
 .sidebar a.active{
-background:rgba(255,255,255,.18);
+    background:rgba(255,255,255,.18);
 }
+
+/* ================= MAIN ================= */
 
 .main{
-margin-left:260px;
-padding:25px;
+    margin-left:260px;
+    padding:25px;
+    min-height:100vh;
 }
+
+/* ================= HEADER ================= */
 
 .header{
-background:#fff;
-padding:20px;
-border-radius:18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-box-shadow:0 8px 25px rgba(0,0,0,.08);
-margin-bottom:25px;
+    background:#fff;
+    padding:20px 25px;
+    border-radius:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    margin-bottom:25px;
 }
 
+.header h3{
+    margin:0;
+    font-weight:700;
+}
+
+.header small{
+    color:#777;
+}
+
+/* ================= CARD ================= */
+
 .card-box{
-background:#fff;
-padding:25px;
-border-radius:18px;
-box-shadow:0 8px 25px rgba(0,0,0,.08);
-margin-bottom:25px;
+    background:#fff;
+    padding:25px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    margin-bottom:25px;
+}
+
+.card-box h4{
+    font-weight:700;
+}
+
+.form-label{
+    font-weight:600;
+}
+
+.form-control,
+.form-select{
+    min-height:45px;
+    border-radius:10px;
+    border:1px solid #ddd;
+}
+
+.form-control:focus,
+.form-select:focus{
+    border-color:#6366f1;
+    box-shadow:0 0 0 .2rem rgba(99,102,241,.12);
+}
+
+/* ================= BUTTONS ================= */
+
+.btn{
+    border-radius:10px;
+    font-weight:600;
+}
+
+/* ================= ALERT ================= */
+
+.alert{
+    border-radius:12px;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:768px){
+
+    .sidebar{
+        position:relative;
+        width:100%;
+        height:auto;
+        padding:20px 15px;
+    }
+
+    .logo{
+        margin-bottom:20px;
+    }
+
+    .main{
+        margin-left:0;
+        padding:15px;
+    }
+
+    .header{
+        padding:18px;
+    }
+
+    .card-box{
+        padding:20px;
+    }
+
+    .btn{
+        margin-bottom:8px;
+    }
 }
 
 </style>
@@ -88,331 +184,497 @@ margin-bottom:25px;
 
 <body>
 
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
 <div class="sidebar">
 
-<div class="logo">
-<i class="bi bi-hospital"></i><br>
-PIMS Premium
+    <div class="logo">
+
+        <i class="bi bi-hospital"></i>
+
+        <br>
+
+        PIMS Premium
+
+    </div>
+
+
+    <a href="{{ url_for('dashboard') }}">
+
+        <i class="bi bi-speedometer2"></i>
+
+        Dashboard
+
+    </a>
+
+
+    <a href="{{ url_for('drugs') }}">
+
+        <i class="bi bi-capsule"></i>
+
+        Drug Management
+
+    </a>
+
+
+    <a href="{{ url_for('sales') }}">
+
+        <i class="bi bi-cart-check"></i>
+
+        Sales
+
+    </a>
+
+
+    <a href="{{ url_for('reports') }}">
+
+        <i class="bi bi-bar-chart"></i>
+
+        Reports
+
+    </a>
+
+
+    <a
+        href="{{ url_for('settings') }}"
+        class="active"
+    >
+
+        <i class="bi bi-gear"></i>
+
+        Settings
+
+    </a>
+
+
+    <a href="{{ url_for('logout') }}">
+
+        <i class="bi bi-box-arrow-right"></i>
+
+        Logout
+
+    </a>
+
 </div>
 
-<a href="/dashboard">
-<i class="bi bi-speedometer2"></i>
-Dashboard
-</a>
 
-<a href="/drugs">
-<i class="bi bi-capsule"></i>
-Drug Management
-</a>
-
-<a href="/sales">
-<i class="bi bi-cart-check"></i>
-Sales
-</a>
-
-<a href="/reports">
-<i class="bi bi-bar-chart"></i>
-Reports
-</a>
-
-<a href="/settings" class="active">
-<i class="bi bi-gear"></i>
-Settings
-</a>
-
-<a href="/">
-<i class="bi bi-box-arrow-right"></i>
-Logout
-</a>
-
-</div>
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
 <div class="main">
 
-<div class="header">
 
-<div>
+    <!-- HEADER -->
 
-<h3>⚙️ Settings</h3>
+    <div class="header">
 
-<small>Manage Admin & Pharmacy Information</small>
+        <div>
+
+            <h3>
+
+                <i class="bi bi-gear-fill text-primary"></i>
+
+                Settings
+
+            </h3>
+
+            <small>
+                Manage Admin & Pharmacy Information
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <!-- FLASH MESSAGES -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div
+                    class="alert alert-{{ category }} alert-dismissible fade show"
+                    role="alert"
+                >
+
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                    ></button>
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =================================================
+         IMPORTANT:
+         ONE FORM FOR ALL SETTINGS
+    ================================================= -->
+
+    <form
+        method="POST"
+        action="{{ url_for('settings') }}"
+    >
+
+
+        <!-- =================================================
+             ADMIN PROFILE
+        ================================================= -->
+
+        <div class="card-box">
+
+            <h4 class="mb-4">
+
+                <i class="bi bi-person-circle text-primary"></i>
+
+                Admin Profile
+
+            </h4>
+
+
+            <div class="row">
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="full_name"
+                        class="form-control"
+                        value="{{ profile.full_name if profile and profile.full_name is defined else (profile[1] if profile else '') }}"
+                    >
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        value="{{ profile.email if profile and profile.email is defined else (profile[2] if profile else '') }}"
+                    >
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Phone
+                    </label>
+
+                    <input
+                        type="text"
+                        name="phone"
+                        class="form-control"
+                        value="{{ profile.phone if profile and profile.phone is defined else (profile[3] if profile else '') }}"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             PHARMACY INFORMATION
+        ================================================= -->
+
+        <div class="card-box">
+
+            <h4 class="mb-4">
+
+                <i class="bi bi-hospital text-success"></i>
+
+                Pharmacy Information
+
+            </h4>
+
+
+            <div class="row">
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Pharmacy Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="pharmacy_name"
+                        class="form-control"
+                        value="{{ pharmacy.pharmacy_name if pharmacy and pharmacy.pharmacy_name is defined else (pharmacy[1] if pharmacy else '') }}"
+                    >
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        License Number
+                    </label>
+
+                    <input
+                        type="text"
+                        name="license_no"
+                        class="form-control"
+                        value="{{ pharmacy.license_no if pharmacy and pharmacy.license_no is defined else (pharmacy[2] if pharmacy else '') }}"
+                    >
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        GST Number
+                    </label>
+
+                    <input
+                        type="text"
+                        name="gst_no"
+                        class="form-control"
+                        value="{{ pharmacy.gst_no if pharmacy and pharmacy.gst_no is defined else (pharmacy[3] if pharmacy else '') }}"
+                    >
+
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+
+                    <label class="form-label">
+                        Contact Number
+                    </label>
+
+                    <input
+                        type="text"
+                        name="contact"
+                        class="form-control"
+                        value="{{ pharmacy.contact if pharmacy and pharmacy.contact is defined else (pharmacy[4] if pharmacy else '') }}"
+                    >
+
+                </div>
+
+
+                <div class="col-12 mb-3">
+
+                    <label class="form-label">
+                        Address
+                    </label>
+
+                    <textarea
+                        name="address"
+                        class="form-control"
+                        rows="3"
+                    >{{ pharmacy.address if pharmacy and pharmacy.address is defined else (pharmacy[5] if pharmacy else '') }}</textarea>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             NOTIFICATION SETTINGS
+        ================================================= -->
+
+        <div class="card-box">
+
+            <h4 class="mb-4">
+
+                <i class="bi bi-bell text-warning"></i>
+
+                Notification Settings
+
+            </h4>
+
+
+            <div class="form-check form-switch mb-3">
+
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="low_stock_alert"
+                    value="1"
+                    {% if notification and notification.low_stock_alert is defined and notification.low_stock_alert %}checked{% elif notification and notification[1] %}checked{% endif %}
+                >
+
+                <label class="form-check-label">
+
+                    Enable Low Stock Alert
+
+                </label>
+
+            </div>
+
+
+            <div class="form-check form-switch mb-3">
+
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="expiry_alert"
+                    value="1"
+                    {% if notification and notification.expiry_alert is defined and notification.expiry_alert %}checked{% elif notification and notification[2] %}checked{% endif %}
+                >
+
+                <label class="form-check-label">
+
+                    Enable Expiry Alert
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             THEME SETTINGS
+        ================================================= -->
+
+        <div class="card-box">
+
+            <h4 class="mb-4">
+
+                <i class="bi bi-palette text-primary"></i>
+
+                Theme Settings
+
+            </h4>
+
+
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Theme
+                </label>
+
+                <select
+                    name="theme"
+                    class="form-select"
+                >
+
+                    <option
+                        value="Light"
+                        {% if theme and theme.theme is defined and theme.theme == 'Light' %}selected{% elif theme and theme[1] == 'Light' %}selected{% endif %}
+                    >
+                        Light
+                    </option>
+
+                    <option
+                        value="Dark"
+                        {% if theme and theme.theme is defined and theme.theme == 'Dark' %}selected{% elif theme and theme[1] == 'Dark' %}selected{% endif %}
+                    >
+                        Dark
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             BUTTONS
+        ================================================= -->
+
+        <div class="card-box">
+
+            <button
+                type="submit"
+                class="btn btn-success btn-lg"
+            >
+
+                <i class="bi bi-check-circle"></i>
+
+                Save Settings
+
+            </button>
+
+
+            <button
+                type="reset"
+                class="btn btn-secondary btn-lg ms-2"
+            >
+
+                <i class="bi bi-arrow-clockwise"></i>
+
+                Reset
+
+            </button>
+
+
+            <a
+                href="{{ url_for('dashboard') }}"
+                class="btn btn-danger btn-lg ms-2"
+            >
+
+                <i class="bi bi-x-circle"></i>
+
+                Cancel
+
+            </a>
+
+        </div>
+
+    </form>
+
+
+    <!-- FOOTER -->
+
+    <footer class="text-center mt-5 text-muted">
+
+        <hr>
+
+        <p class="mb-0">
+
+            © 2026
+
+            <strong>PIMS Premium</strong>
+
+            |
+
+            Pharmacy Inventory Management System
+
+        </p>
+
+    </footer>
 
 </div>
 
-</div>
 
-<form method="POST">
+<script
+src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
-<div class="card-box">
-
-<h4 class="mb-4">
-
-<i class="bi bi-person-circle text-primary"></i>
-
-Admin Profile
-
-</h4>
-
-<div class="row">
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">Full Name</label>
-
-<input
-type="text"
-name="full_name"
-class="form-control"
-value="{{ profile[1] if profile else '' }}">
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">Email</label>
-
-<input
-type="email"
-name="email"
-class="form-control"
-value="{{ profile[2] if profile else '' }}">
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">Phone</label>
-
-<input
-type="text"
-name="phone"
-class="form-control"
-value="{{ profile[3] if profile else '' }}">
-
-</div>
-
-<div class="card-box">
-
-<h4 class="mb-4">
-
-<i class="bi bi-hospital text-success"></i>
-
-Pharmacy Information
-
-</h4>
-
-<div class="row">
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Pharmacy Name
-</label>
-
-<input
-type="text"
-name="pharmacy_name"
-class="form-control"
-value="{{ pharmacy[1] if pharmacy else '' }}">
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-License Number
-</label>
-
-<input
-type="text"
-name="license_no"
-class="form-control"
-value="{{ pharmacy[2] if pharmacy else '' }}">
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-GST Number
-</label>
-
-<input
-type="text"
-name="gst_no"
-class="form-control"
-value="{{ pharmacy[3] if pharmacy else '' }}">
-
-</div>
-
-<div class="col-md-6 mb-3">
-
-<label class="form-label">
-Contact Number
-</label>
-
-<input
-type="text"
-name="contact"
-class="form-control"
-value="{{ pharmacy[4] if pharmacy else '' }}">
-
-</div>
-
-<div class="col-12 mb-3">
-
-<label class="form-label">
-Address
-</label>
-
-<textarea
-name="address"
-class="form-control"
-rows="3">{{ pharmacy[5] if pharmacy else '' }}</textarea>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- Notification Settings -->
-
-<div class="card-box">
-
-<h4 class="mb-4">
-
-<i class="bi bi-bell text-warning"></i>
-
-Notification Settings
-
-</h4>
-
-<div class="form-check form-switch mb-3">
-
-<input
-class="form-check-input"
-type="checkbox"
-name="low_stock_alert"
-{% if notification and notification[1] %}checked{% endif %}>
-
-<label class="form-check-label">
-
-Enable Low Stock Alert
-
-</label>
-
-</div>
-
-<div class="form-check form-switch mb-3">
-
-<input
-class="form-check-input"
-type="checkbox"
-name="expiry_alert"
-{% if notification and notification[2] %}checked{% endif %}>
-
-<label class="form-check-label">
-
-Enable Expiry Alert
-
-</label>
-
-</div>
-
-</div>
-
-<!-- Theme Settings -->
-
-<div class="card-box">
-
-<h4 class="mb-4">
-
-<i class="bi bi-palette text-primary"></i>
-
-Theme Settings
-
-</h4>
-
-<div class="mb-3">
-
-<label class="form-label">
-
-Theme
-
-</label>
-
-<select
-name="theme"
-class="form-select">
-
-<option value="Light"
-{% if theme and theme[1]=='Light' %}selected{% endif %}>
-Light
-</option>
-
-<option value="Dark"
-{% if theme and theme[1]=='Dark' %}selected{% endif %}>
-Dark
-</option>
-
-</select>
-
-</div>
-
-<div class="mt-4">
-
-<button
-type="submit"
-class="btn btn-success btn-lg">
-
-<i class="bi bi-check-circle"></i>
-
-Save Settings
-
-</button>
-
-<button
-type="reset"
-class="btn btn-secondary btn-lg ms-2">
-
-<i class="bi bi-arrow-clockwise"></i>
-
-Reset
-
-</button>
-
-<a
-href="/dashboard"
-class="btn btn-danger btn-lg ms-2">
-
-<i class="bi bi-x-circle"></i>
-
-Cancel
-
-</a>
-
-</div>
-
-</form>
-
-<footer class="text-center mt-5 text-muted">
-
-<hr>
-
-<p class="mb-0">
-
-© 2026 <strong>PIMS Premium</strong> |
-Pharmacy Inventory Management System
-
-</p>
-
-</footer>
-
-</div>
-<!-- End Main -->
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
 </html>
