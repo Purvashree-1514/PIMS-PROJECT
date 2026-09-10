@@ -76,8 +76,12 @@ app.config["MYSQL_DB"] = os.environ.get(
 
 app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 
-mysql = MySQL(app)
+# TiDB Cloud Starter requires a secure TLS connection
+app.config["MYSQL_CUSTOM_OPTIONS"] = {
+    "ssl_mode": "REQUIRED"
+}
 
+mysql = MySQL(app)
 
 # =========================================================
 # HELPER FUNCTIONS
